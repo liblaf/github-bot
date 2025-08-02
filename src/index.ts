@@ -7,7 +7,9 @@ import { UAParser } from "ua-parser-js";
 import { version } from "../package.json";
 import { makeGitHubApp } from "./app";
 
-const app = new OpenAPIHono<{ Bindings: CloudflareBindings }>();
+const app: OpenAPIHono<{ Bindings: CloudflareBindings }> = new OpenAPIHono<{
+  Bindings: CloudflareBindings;
+}>();
 
 app.doc("/openapi.json", {
   openapi: "3.0.0",
