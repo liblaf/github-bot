@@ -6,3 +6,4 @@ main = "./src/index.ts"
 minify = true
 name = "github-bot"
 send_metrics = false
+upload_source_maps = true
