@@ -1,0 +1,8 @@
+#:schema https://www.unpkg.com/wrangler/config-schema.json
+
+compatibility_date = "2025-08-02"
+compatibility_flags = ["nodejs_compat"]
+main = "./src/index.ts"
+minify = true
+name = "github-bot"
+send_metrics = false

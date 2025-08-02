@@ -1,0 +1,4 @@
+#:schema https://mise.jdx.dev/schema/mise.json
+
+[hooks.enter]
+script = "mise run gen-dev-vars"

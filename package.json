@@ -1,0 +1,60 @@
+{
+  "name": "@liblaf/github-bot",
+  "description": "TODO",
+  "version": "0.0.0",
+  "type": "module",
+  "keywords": [
+    "TODO"
+  ],
+  "homepage": "https://github.com/liblaf/github-bot",
+  "bugs": {
+    "url": "https://github.com/liblaf/github-bot/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "liblaf",
+    "url": "https://github.com/liblaf",
+    "email": "30631553+liblaf@users.noreply.github.com"
+  },
+  "bin": {},
+  "repository": "github:liblaf/github-bot",
+  "funding": {
+    "url": "https://github.com/liblaf/github-bot?sponsor=1",
+    "type": "github"
+  },
+  "scripts": {
+    "build": "bunup",
+    "dev-proxy": "smee --port 8787 --path '/api/github/webhooks'",
+    "dev": "wrangler dev --port 8787",
+    "generate-types": "wrangler types --env-file '.dev.vars.tmpl' --env-interface 'CloudflareBindings'",
+    "lint": "biome check --write",
+    "prepack": "npm run build",
+    "prepare": "npm run generate-types"
+  },
+  "dependencies": {
+    "@hono/zod-openapi": "^1.0.2",
+    "@octokit/webhooks": "^14.1.3",
+    "@scalar/hono-api-reference": "^0.9.13",
+    "hono": "^4.8.12",
+    "octokit": "^5.0.3",
+    "ua-parser-js": "^2.0.4",
+    "zod": "^4.0.14"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "latest",
+    "@tsconfig/bun": "latest",
+    "@types/bun": "latest",
+    "bunup": "latest",
+    "smee-client": "^4.3.1",
+    "wrangler": "^4.27.0"
+  },
+  "peerDependencies": {
+    "typescript": "latest"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
+  "readme": "README.md"
+}
