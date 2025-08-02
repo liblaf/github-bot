@@ -9,19 +9,70 @@ on:
   repository_dispatch:
     types:
       - repository.created
+  workflow_call:
+    inputs:
+      owner:
+        description: owner
+        required: true
+        default: liblaf
+        type: string
+      repo:
+        description: repo
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      owner:
+        description: owner
+        required: true
+        default: liblaf
+        type: string
+      repo:
+        description: repo
+        required: true
+        type: string
 
 jobs:
+  inputs:
+    name: Inputs
+    runs-on: ubuntu-latest
+    outputs:
+      full-name: ${{ steps.inputs.outputs.full-name }}
+      owner: ${{ steps.inputs.outputs.owner }}
+      repo: ${{ steps.inputs.outputs.repo }}
+    steps:
+      - id: inputs
+        name: Set Inputs
+        run: |-
+          case '${{ github.event_name }}' in
+            'repository_dispatch')
+              echo 'full-name=${{ github.event.client_payload.full_name }}' >> "$GITHUB_OUTPUT"
+              echo 'owner=${{ github.event.client_payload.owner }}' >> "$GITHUB_OUTPUT"
+              echo 'repo=${{ github.event.client_payload.repo }}' >> "$GITHUB_OUTPUT"
+              ;;
+            'workflow_call' | 'workflow_dispatch')
+              echo 'full-name=${{ inputs.owner }}/${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
+              echo 'owner=${{ inputs.owner }}' >> "$GITHUB_OUTPUT"
+              echo 'repo=${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo '::error::Unsupported event name: ${{ github.event_name }}'
+              ;;
+          esac
+
   actions:
     name: Actions
+    needs:
+      - inputs
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.event.client_payload.repository.full_name }}/${{ github.workflow }}/actions
+      group: ${{ needs.inputs.outputs.full-name }}/${{ github.workflow }}/actions
       cancel-in-progress: true
     steps:
       - name: Set Default Workflow Permissions
         # ref: <https://docs.github.com/en/rest/actions/permissions#set-default-workflow-permissions-for-a-repository>
         run: >-
-          gh api '/repos/${{ github.event.client_payload.repository.full_name }}/actions/permissions/workflow'
+          gh api '/repos/${{ needs.inputs.outputs.full-name }}/actions/permissions/workflow'
           --field default_workflow_permissions='read'
           --field can_approve_pull_request_reviews=true
           --method PUT
@@ -32,9 +83,11 @@ jobs:
     name: Copier
     permissions:
       contents: write
+    needs:
+      - inputs
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.event.client_payload.repository.full_name }}/${{ github.workflow }}/copier
+      group: ${{ needs.inputs.outputs.full-name }}/${{ github.workflow }}/copier
       cancel-in-progress: true
     steps:
       - id: auth
@@ -43,12 +96,12 @@ jobs:
         with:
           app-id: ${{ secrets.GH_APP_ID }}
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
-          owner: ${{ github.event.client_payload.repository.owner.login }}
-          repositories: ${{ github.event.client_payload.repository.name }}
+          owner: ${{ needs.inputs.outputs.owner }}
+          repositories: ${{ needs.inputs.outputs.repo }}
       - id: branches
         name: Get Branches
         run: |-
-          n_branches="$(gh api "/repos/${{ github.event.client_payload.repository.full_name }}/branches" --jq 'length')"
+          n_branches="$(gh api "/repos/${{ needs.inputs.outputs.full-name }}/branches" --jq 'length')"
           echo "n_branches=$n_branches" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ steps.auth.outputs.token }}
@@ -56,7 +109,7 @@ jobs:
         name: Checkout
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.event.client_payload.repository.full_name }}
+          repository: ${{ needs.inputs.outputs.full-name }}
           token: ${{ steps.auth.outputs.token }}
       - if: ${{ steps.branches.outputs.n_branches > 0 }}
         name: Copier Update
@@ -67,15 +120,17 @@ jobs:
         with:
           add-options: --verbose --all
           message: "chore(copier): update from template"
-          owner: ${{ github.event.client_payload.repository.owner.login }}
-          repository: ${{ github.event.client_payload.repository.name }}
+          owner: ${{ needs.inputs.outputs.owner }}
+          repository: ${{ needs.inputs.outputs.repo }}
           token: ${{ steps.auth.outputs.token }}
 
   label:
     name: Label
+    needs:
+      - inputs
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.event.client_payload.repository.full_name }}/${{ github.workflow }}/label
+      group: ${{ needs.inputs.outputs.full-name }}/${{ github.workflow }}/label
       cancel-in-progress: true
     steps:
       - id: auth
@@ -84,31 +139,33 @@ jobs:
         with:
           app-id: ${{ secrets.GH_APP_ID }}
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
-          owner: ${{ github.event.client_payload.repository.owner.login }}
-          repositories: ${{ github.event.client_payload.repository.name }}
+          owner: ${{ needs.inputs.outputs.owner }}
+          repositories: ${{ needs.inputs.outputs.repo }}
         # TODO: remove download labels until <https://github.com/Financial-Times/github-label-sync/issues/193> is resolved
       - name: Download Labels
         run: >-
           wget --output-document='labels.yaml'
-          'https://raw.githubusercontent.com/${{ github.event.client_payload.repository.owner.login }}/.github/main/.github/labels.yaml'
+          'https://raw.githubusercontent.com/${{ needs.inputs.outputs.owner }}/.github/main/.github/labels.yaml'
       - name: GitHub Label Sync
         run: >-
           npx github-label-sync
           --access-token '${{ steps.auth.outputs.token }}'
           --labels 'labels.yaml'
           --allow-added-labels
-          '${{ github.event.client_payload.repository.full_name }}'
+          '${{ needs.inputs.outputs.full-name }}'
 
   repo:
     name: Repo
+    needs:
+      - inputs
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.event.client_payload.repository.full_name }}/${{ github.workflow }}/repo
+      group: ${{ needs.inputs.outputs.full-name }}/${{ github.workflow }}/repo
       cancel-in-progress: true
     steps:
       - name: Edit Repository Setttings
         run: >-
-          gh repo edit '${{ github.event.client_payload.repository.full_name }}'
+          gh repo edit '${{ needs.inputs.outputs.full-name }}'
           --allow-update-branch
           --delete-branch-on-merge
           --enable-auto-merge
@@ -123,31 +180,35 @@ jobs:
 
   ruleset:
     name: Ruleset
+    needs:
+      - inputs
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.event.client_payload.repository.full_name }}/${{ github.workflow }}/ruleset
+      group: ${{ needs.inputs.outputs.full-name }}/${{ github.workflow }}/ruleset
       cancel-in-progress: true
     steps:
       - name: Ruleset Import
         # TODO: switch to gh cli until <https://github.com/cli/cli/issues/8019> is resolved
         uses: liblaf/actions/ruleset-import@main
         with:
-          repo: ${{ github.event.client_payload.repository.full_name }}
+          repo: ${{ needs.inputs.outputs.full-name }}
           token: ${{ secrets.GH_PAT }}
-          source-repo: ${{ github.event.client_payload.repository.owner.login }}/.github
+          source-repo: ${{ needs.inputs.outputs.owner }}/.github
           source-ruleset-id: 3407904
 
   secrets:
     name: Secrets
+    needs:
+      - inputs
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.event.client_payload.repository.full_name }}/${{ github.workflow }}/secrets
+      group: ${{ needs.inputs.outputs.full-name }}/${{ github.workflow }}/secrets
       cancel-in-progress: true
     steps:
       - name: Create or Update Secrets
         run: |-
           function secret-set() {
-            gh secret --repo '${{ github.event.client_payload.repository.full_name }}' set "$1" --body "$2"
+            gh secret --repo '${{ needs.inputs.outputs.full-name }}' set "$1" --body "$2"
           }
 
           secret-set CARGO_REGISTRY_TOKEN '${{ secrets.CARGO_REGISTRY_TOKEN }}'
