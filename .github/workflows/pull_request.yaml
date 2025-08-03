@@ -105,25 +105,24 @@ jobs:
           repo: ${{ needs.inputs.outputs.full-name }}
           token: ${{ steps.auth.outputs.token }}
 
-  auto-review:
-    name: Auto Review
+  auto-approve:
+    name: Auto Approve
     needs:
       - inputs
     runs-on: ubuntu-latest
     steps:
       - id: auth
-        name: Auth App
+        name: Authenticate
         uses: liblaf/actions/auth-app@main
         with:
           app-id: ${{ secrets.GH_APP_ID }}
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
           owner: ${{ needs.inputs.outputs.owner }}
           repositories: ${{ needs.inputs.outputs.repo }}
-      - name: Auto Review Renovate
-        uses: liblaf/actions/approve@main
+      - name: Auto Approve Renovate
+        uses: liblaf/actions-ts/approve@dist
         with:
-          authors: |-
-            app/renovate
-          pr-number: ${{ needs.inputs.outputs.number }}
-          repo: ${{ needs.inputs.outputs.full-name }}
+          authors: renovate[bot]
+          pull-number: ${{ needs.inputs.outputs.number }}
+          repository: ${{ needs.inputs.outputs.full-name }}
           token: ${{ secrets.GH_PAT }}
