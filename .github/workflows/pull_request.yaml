@@ -32,6 +32,7 @@ on:
         type: number
   repository_dispatch:
     types:
+      - pull_request_review.dismissed
       # ref: <https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request>
       - pull_request.opened
       - pull_request.reopened
@@ -39,7 +40,7 @@ on:
 
 concurrency:
   group: >-
-    ${{ github.workflow }}: ${{ inputs.owner || github.event.client_payload.repository.owner.login }}/${{ inputs.repo || github.event.client_payload.repository.name }}#${{ inputs.number || github.event.client_payload.number }}
+    ${{ github.workflow }}: ${{ inputs.owner || github.event.client_payload.repository.owner.login }}/${{ inputs.repo || github.event.client_payload.repository.name }}#${{ inputs.number || github.event.client_payload.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
@@ -103,3 +104,26 @@ jobs:
           app: renovate
           repo: ${{ needs.inputs.outputs.full-name }}
           token: ${{ steps.auth.outputs.token }}
+
+  auto-review:
+    name: Auto Review
+    needs:
+      - inputs
+    runs-on: ubuntu-latest
+    steps:
+      - id: auth
+        name: Auth App
+        uses: liblaf/actions/auth-app@main
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          owner: ${{ needs.inputs.outputs.owner }}
+          repositories: ${{ needs.inputs.outputs.repo }}
+      - name: Auto Review Renovate
+        uses: liblaf/actions/approve@main
+        with:
+          authors: |-
+            app/renovate
+          pr-number: ${{ needs.inputs.outputs.number }}
+          repo: ${{ needs.inputs.outputs.full-name }}
+          token: ${{ secrets.GH_PAT }}
