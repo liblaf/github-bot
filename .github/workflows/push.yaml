@@ -99,6 +99,10 @@ jobs:
       - inputs
     if: ${{ needs.inputs.outputs.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
+    outputs:
+      created: ${{ steps.release-please.outputs.release_created }}
+      pr: ${{ steps.release-please.outputs.pr }}
+      tag: ${{ steps.release-please.outputs.tag_name }}
     steps:
       - id: auth
         name: Authenticate
@@ -125,10 +129,93 @@ jobs:
           if [[ -f $manifest_file ]]; then
             printf 'manifest-file=%s\n' "$manifest_file" >> "$GITHUB_OUTPUT"
           fi
-      - if: ${{ steps.config.outputs.config-file && steps.config.outputs.manifest-file }}
-        uses: googleapis/release-please-action@v4
+      - id: release-please
+        if: ${{ steps.config.outputs.config-file && steps.config.outputs.manifest-file }}
+        name: Release Please
+        uses: dsktschy/release-please-action@main
         with:
           token: ${{ steps.auth.outputs.token }}
           config-file: ${{ steps.config.outputs.config-file }}
           manifest-file: ${{ steps.config.outputs.manifest-file }}
           repo-url: ${{ needs.inputs.outputs.full-name }}
+
+  changelog-pr:
+    name: Changelog (PR)
+    needs:
+      - inputs
+      - release-please
+    if: ${{ needs.release-please.outputs.pr }}
+    runs-on: ubuntu-latest
+    steps:
+      - id: auth
+        name: Auth App
+        uses: liblaf/actions/auth-app@main
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          owner: ${{ needs.inputs.outputs.owner }}
+          repositories: ${{ needs.inputs.outputs.repo }}
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ needs.inputs.outputs.full-name }}
+          ref: ${{ fromJson(needs.release-please.outputs.pr).headBranchName }}
+          token: ${{ steps.auth.outputs.token }}
+          fetch-depth: 0
+      - id: tag
+        name: Parse Tag
+        run: |-
+          title="${{ fromJson(needs.release-please.outputs.pr).title }}"
+          version=$(echo "$title" | awk '{ print $NF }')
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+      - name: Changelog
+        uses: liblaf/actions/changelog@main
+        with:
+          args: --tag "${{ steps.tag.outputs.tag }}"
+          output: CHANGELOG.md
+      - name: Commit
+        uses: liblaf/actions/commit@main
+        with:
+          add-options: --verbose 'CHANGELOG.md'
+          message: "chore(docs): update CHANGELOG.md"
+          owner: ${{ needs.inputs.outputs.owner }}
+          ref: ${{ fromJson(needs.release-please.outputs.pr).headBranchName }}
+          repository: ${{ needs.inputs.outputs.repo }}
+          token: ${{ steps.auth.outputs.token }}
+
+  changelog-release:
+    name: Changelog (Release)
+    needs:
+      - inputs
+      - release-please
+    if: ${{ needs.release-please.outputs.created }}
+    runs-on: ubuntu-latest
+    steps:
+      - id: auth
+        name: Auth App
+        uses: liblaf/actions/auth-app@main
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          owner: ${{ needs.inputs.outputs.owner }}
+          repositories: ${{ needs.inputs.outputs.repo }}
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ needs.inputs.outputs.full-name }}
+          ref: ${{ needs.release-please.outputs.tag }}
+          token: ${{ steps.auth.outputs.token }}
+          fetch-depth: 0
+      - id: changelog
+        name: Changelog
+        uses: liblaf/actions/changelog@main
+        with:
+          args: --current --strip all
+      - name: Update Release
+        run: >-
+          gh release
+          edit '${{ needs.release-please.outputs.tag }}'
+          --notes-file '${{ steps.changelog.outputs.changelog }}'
+          --repo '${{ needs.inputs.outputs.full-name }}'
+        env:
+          GH_TOKEN: ${{ steps.auth.outputs.token }}
