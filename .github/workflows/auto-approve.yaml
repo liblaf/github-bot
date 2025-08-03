@@ -25,23 +25,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Auto Approve Release Please
-        run: npx @liblaf/github-bot-cli approve-all
-        env:
-          INPUT_APP_ID: ${{ secrets.GH_APP_ID }}
-          INPUT_LABELS: |-
-            autorelease: pending
-          INPUT_PRIVATE_KEY: ${{ secrets.GH_APP_PRIVATE_KEY }}
-          INPUT_TOKEN: ${{ secrets.GH_PAT }}
+        uses: liblaf/actions-ts/all-repos-approve@dist
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          labels: "autorelease: pending"
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          token: ${{ secrets.GH_PAT }}
 
   renovate:
     name: Renovate
     runs-on: ubuntu-latest
     steps:
       - name: Auto Approve Renovate
-        run: npx @liblaf/github-bot-cli approve-all
-        env:
-          INPUT_APP_ID: ${{ secrets.GH_APP_ID }}
-          INPUT_AUTHORS: |-
-            renovate[bot]
-          INPUT_PRIVATE_KEY: ${{ secrets.GH_APP_PRIVATE_KEY }}
-          INPUT_TOKEN: ${{ secrets.GH_PAT }}
+        uses: liblaf/actions-ts/all-repos-approve@dist
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          authors: renovate[bot]
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          token: ${{ secrets.GH_PAT }}
