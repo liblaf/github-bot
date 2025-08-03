@@ -96,13 +96,6 @@ jobs:
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
           owner: ${{ needs.inputs.outputs.owner }}
           repositories: ${{ needs.inputs.outputs.repo }}
-      - name: Auto-Merge Release Please
-        uses: liblaf/actions/pr-label@main
-        with:
-          add-label: automerge
-          label: "autorelease: pending"
-          repo: ${{ needs.inputs.outputs.full-name }}
-          token: ${{ steps.auth.outputs.token }}
       - name: Auto-Merge Renovate
         uses: liblaf/actions/pr-label@main
         with:
