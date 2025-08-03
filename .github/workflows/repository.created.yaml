@@ -30,7 +30,32 @@ on:
         required: true
         type: string
 
+concurrency:
+  group: >-
+    ${{ github.workflow }}
+    ${{ inputs.owner }}/${{ inputs.repo }}
+    ${{ github.event.client_payload.repository.full_name }}
+  cancel-in-progress: true
+
 jobs:
+  delete-cancelled-runs:
+    name: Delete Cancelled Runs
+    permissions:
+      actions: write
+    runs-on: ubuntu-latest
+    steps:
+      - id: workflow
+        name: Get Workflow File
+        run: |-
+          workflow_ref='${{ github.workflow_ref }}'
+          workflow_filepath="${workflow_ref%'@'*}"
+          workflow_filename="${workflow_filepath##*'/'}"
+          printf "filename=%s\n" "$workflow_filename" >> "$GITHUB_OUTPUT"
+      - uses: MercuryTechnologies/delete-cancelled-runs@1.0.0
+        with:
+          workflow-file: ${{ steps.workflow.outputs.filename }}
+          github-token: ${{ github.token }}
+
   inputs:
     name: Inputs
     runs-on: ubuntu-latest
@@ -44,14 +69,14 @@ jobs:
         run: |-
           case '${{ github.event_name }}' in
             'repository_dispatch')
-              echo 'full-name=${{ github.event.client_payload.repository.full_name }}' >> "$GITHUB_OUTPUT"
-              echo 'owner=${{ github.event.client_payload.repository.owner.login }}' >> "$GITHUB_OUTPUT"
-              echo 'repo=${{ github.event.client_payload.repository.name }}' >> "$GITHUB_OUTPUT"
+              printf 'full-name=%s\n' '${{ github.event.client_payload.repository.full_name }}' >> "$GITHUB_OUTPUT"
+              printf 'owner=%s\n' '${{ github.event.client_payload.repository.owner.login }}' >> "$GITHUB_OUTPUT"
+              printf 'repo=%s\n' '${{ github.event.client_payload.repository.name }}' >> "$GITHUB_OUTPUT"
               ;;
             'workflow_call' | 'workflow_dispatch')
-              echo 'full-name=${{ inputs.owner }}/${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
-              echo 'owner=${{ inputs.owner }}' >> "$GITHUB_OUTPUT"
-              echo 'repo=${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
+              printf 'full-name=%s\n' '${{ inputs.owner }}/${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
+              printf 'owner=%s\n' '${{ inputs.owner }}' >> "$GITHUB_OUTPUT"
+              printf 'repo=%s\n' '${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
               ;;
             *)
               echo '::error::Unsupported event name: ${{ github.event_name }}'
@@ -63,9 +88,6 @@ jobs:
     needs:
       - inputs
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ needs.inputs.outputs.full-name }}/${{ github.workflow }}/actions
-      cancel-in-progress: true
     steps:
       - name: Set Default Workflow Permissions
         # ref: <https://docs.github.com/en/rest/actions/permissions#set-default-workflow-permissions-for-a-repository>
@@ -79,14 +101,9 @@ jobs:
 
   copier:
     name: Copier
-    permissions:
-      contents: write
     needs:
       - inputs
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ needs.inputs.outputs.full-name }}/${{ github.workflow }}/copier
-      cancel-in-progress: true
     steps:
       - id: auth
         name: Auth App
@@ -127,9 +144,6 @@ jobs:
     needs:
       - inputs
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ needs.inputs.outputs.full-name }}/${{ github.workflow }}/label
-      cancel-in-progress: true
     steps:
       - id: auth
         name: Auth App
@@ -157,9 +171,6 @@ jobs:
     needs:
       - inputs
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ needs.inputs.outputs.full-name }}/${{ github.workflow }}/repo
-      cancel-in-progress: true
     steps:
       - name: Edit Repository Setttings
         run: >-
@@ -181,9 +192,6 @@ jobs:
     needs:
       - inputs
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ needs.inputs.outputs.full-name }}/${{ github.workflow }}/ruleset
-      cancel-in-progress: true
     steps:
       - name: Ruleset Import
         # TODO: switch to gh cli until <https://github.com/cli/cli/issues/8019> is resolved
@@ -199,9 +207,6 @@ jobs:
     needs:
       - inputs
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ needs.inputs.outputs.full-name }}/${{ github.workflow }}/secrets
-      cancel-in-progress: true
     steps:
       - name: Create or Update Secrets
         run: |-
