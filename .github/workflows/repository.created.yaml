@@ -1,7 +1,7 @@
 name: repository.created
 
 run-name: >-
-  repository.created: ${{ github.event.client_payload.repository.full_name }}
+  ${{ github.workflow }}: ${{ github.workflow }}: ${{ inputs.owner || github.event.client_payload.repositories.owner.login }}/${{ inputs.repo || github.event.client_payload.repositories.name }}
 
 on:
   repository_dispatch:
@@ -32,9 +32,7 @@ on:
 
 concurrency:
   group: >-
-    ${{ github.workflow }}
-    ${{ inputs.owner }}/${{ inputs.repo }}
-    ${{ github.event.client_payload.repository.full_name }}
+    ${{ github.workflow }}: ${{ inputs.owner || github.event.client_payload.repositories.owner.login }}/${{ inputs.repo || github.event.client_payload.repositories.name }}
   cancel-in-progress: true
 
 jobs:
@@ -65,7 +63,7 @@ jobs:
       repo: ${{ steps.inputs.outputs.repo }}
     steps:
       - id: inputs
-        name: Set Inputs
+        name: Parse Inputs
         run: |-
           case '${{ github.event_name }}' in
             'repository_dispatch')

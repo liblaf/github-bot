@@ -1,0 +1,121 @@
+name: pull_request
+
+run-name: >-
+  ${{ github.workflow }}: ${{ inputs.owner || github.event.client_payload.repository.owner.login }}/${{ inputs.repo || github.event.client_payload.repository.name }}#${{ inputs.number || github.event.client_payload.number }}
+
+on:
+  workflow_call:
+    inputs:
+      owner:
+        required: true
+        type: string
+      repo:
+        required: true
+        type: string
+      number:
+        required: true
+        type: number
+  workflow_dispatch:
+    inputs:
+      owner:
+        description: owner
+        required: true
+        default: liblaf
+        type: string
+      repo:
+        description: repo
+        required: true
+        type: string
+      number:
+        description: pull request number
+        required: true
+        type: number
+  repository_dispatch:
+    types:
+      # ref: <https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request>
+      - pull_request.opened
+      - pull_request.reopened
+      - pull_request.synchronize
+
+concurrency:
+  group: >-
+    ${{ github.workflow }}: ${{ inputs.owner || github.event.client_payload.repository.owner.login }}/${{ inputs.repo || github.event.client_payload.repository.name }}#${{ inputs.number || github.event.client_payload.number }}
+  cancel-in-progress: true
+
+jobs:
+  delete-cancelled-runs:
+    name: Delete Cancelled Runs
+    permissions:
+      actions: write
+    runs-on: ubuntu-latest
+    steps:
+      - id: workflow
+        name: Get Workflow File
+        run: |-
+          workflow_ref='${{ github.workflow_ref }}'
+          workflow_filepath="${workflow_ref%'@'*}"
+          workflow_filename="${workflow_filepath##*'/'}"
+          printf "filename=%s\n" "$workflow_filename" >> "$GITHUB_OUTPUT"
+      - uses: MercuryTechnologies/delete-cancelled-runs@1.0.0
+        with:
+          workflow-file: ${{ steps.workflow.outputs.filename }}
+          github-token: ${{ github.token }}
+
+  inputs:
+    name: Inputs
+    runs-on: ubuntu-latest
+    outputs:
+      full-name: ${{ steps.inputs.outputs.full-name }}
+      number: ${{ steps.inputs.outputs.number }}
+      owner: ${{ steps.inputs.outputs.owner }}
+      repo: ${{ steps.inputs.outputs.repo }}
+    steps:
+      - id: inputs
+        name: Parse Inputs
+        run: |-
+          case '${{ github.event_name }}' in
+            'repository_dispatch')
+              printf 'full-name=%s\n' '${{ github.event.client_payload.repository.full_name }}' >> "$GITHUB_OUTPUT"
+              printf 'number=%s\n' '${{ github.event.client_payload.number }}' >> "$GITHUB_OUTPUT"
+              printf 'owner=%s\n' '${{ github.event.client_payload.repository.owner.login }}' >> "$GITHUB_OUTPUT"
+              printf 'repo=%s\n' '${{ github.event.client_payload.repository.name }}' >> "$GITHUB_OUTPUT"
+              ;;
+            'workflow_call' | 'workflow_dispatch')
+              printf 'full-name=%s\n' '${{ inputs.owner }}/${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
+              printf 'number=%s\n' '${{ inputs.number }}' >> "$GITHUB_OUTPUT"
+              printf 'owner=%s\n' '${{ inputs.owner }}' >> "$GITHUB_OUTPUT"
+              printf 'repo=%s\n' '${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo '::error::Unsupported event name: ${{ github.event_name }}'
+              ;;
+          esac
+
+  auto-merge:
+    name: Auto-Merge
+    needs:
+      - inputs
+    runs-on: ubuntu-latest
+    steps:
+      - id: auth
+        name: Auth App
+        uses: liblaf/actions/auth-app@main
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          owner: ${{ needs.inputs.outputs.owner }}
+          repositories: ${{ needs.inputs.outputs.repo }}
+      - name: Auto-Merge Release Please
+        uses: liblaf/actions/pr-label@main
+        with:
+          add-label: automerge
+          label: "autorelease: pending"
+          repo: ${{ needs.inputs.outputs.full-name }}
+          token: ${{ steps.auth.outputs.token }}
+      - name: Auto-Merge Renovate
+        uses: liblaf/actions/pr-label@main
+        with:
+          add-label: automerge
+          app: renovate
+          repo: ${{ needs.inputs.outputs.full-name }}
+          token: ${{ steps.auth.outputs.token }}
