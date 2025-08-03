@@ -1,0 +1,134 @@
+name: push
+
+run-name: >-
+  ${{ github.workflow }}: ${{ inputs.owner || github.event.client_payload.repository.owner.login }}/${{ inputs.repo || github.event.client_payload.repository.name }}@${{ inputs.ref || github.event.client_payload.ref }}
+
+on:
+  workflow_call:
+    inputs:
+      owner:
+        description: owner
+        required: true
+        type: string
+      repo:
+        description: repo
+        required: true
+        type: string
+      ref:
+        description: ref
+        required: true
+        type: string
+        default: refs/heads/main
+  workflow_dispatch:
+    inputs:
+      owner:
+        description: owner
+        required: true
+        default: liblaf
+        type: string
+      repo:
+        description: repo
+        required: true
+        type: string
+      ref:
+        description: ref
+        required: true
+        default: refs/heads/main
+        type: string
+  repository_dispatch:
+    types:
+      - push
+
+concurrency:
+  group: >-
+    ${{ github.workflow }}: ${{ inputs.owner || github.event.client_payload.repository.owner.login }}/${{ inputs.repo || github.event.client_payload.repository.name }}@${{ inputs.ref || github.event.client_payload.ref }}
+  cancel-in-progress: true
+
+jobs:
+  delete-cancelled-runs:
+    name: Delete Cancelled Runs
+    permissions:
+      actions: write
+    runs-on: ubuntu-latest
+    steps:
+      - id: workflow
+        name: Get Workflow File
+        run: |-
+          workflow_ref='${{ github.workflow_ref }}'
+          workflow_filepath="${workflow_ref%'@'*}"
+          workflow_filename="${workflow_filepath##*'/'}"
+          printf "filename=%s\n" "$workflow_filename" >> "$GITHUB_OUTPUT"
+      - uses: MercuryTechnologies/delete-cancelled-runs@1.0.0
+        with:
+          workflow-file: ${{ steps.workflow.outputs.filename }}
+          github-token: ${{ github.token }}
+
+  inputs:
+    name: Inputs
+    runs-on: ubuntu-latest
+    outputs:
+      full-name: ${{ steps.inputs.outputs.full-name }}
+      owner: ${{ steps.inputs.outputs.owner }}
+      ref: ${{ steps.inputs.outputs.ref }}
+      repo: ${{ steps.inputs.outputs.repo }}
+    steps:
+      - id: inputs
+        name: Parse Inputs
+        run: |-
+          case '${{ github.event_name }}' in
+            'repository_dispatch')
+              printf 'full-name=%s\n' '${{ github.event.client_payload.repository.full_name }}' >> "$GITHUB_OUTPUT"
+              printf 'owner=%s\n' '${{ github.event.client_payload.repository.owner.login }}' >> "$GITHUB_OUTPUT"
+              printf 'ref=%s\n' '${{ github.event.client_payload.ref }}' >> "$GITHUB_OUTPUT"
+              printf 'repo=%s\n' '${{ github.event.client_payload.repository.name }}' >> "$GITHUB_OUTPUT"
+              ;;
+            'workflow_call' | 'workflow_dispatch')
+              printf 'full-name=%s\n' '${{ inputs.owner }}/${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
+              printf 'owner=%s\n' '${{ inputs.owner }}' >> "$GITHUB_OUTPUT"
+              printf 'ref=%s\n' '${{ inputs.ref }}' >> "$GITHUB_OUTPUT"
+              printf 'repo=%s\n' '${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo '::error::Unsupported event name: ${{ github.event_name }}'
+              ;;
+          esac
+
+  release-please:
+    name: Release Please
+    needs:
+      - inputs
+    if: ${{ needs.inputs.outputs.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - id: auth
+        name: Authenticate
+        uses: liblaf/actions/auth-app@main
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          owner: ${{ needs.inputs.outputs.owner }}
+          repositories: ${{ needs.inputs.outputs.repo }}
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ needs.inputs.outputs.full-name }}
+          ref: ${{ needs.inputs.outputs.ref }}
+          token: ${{ steps.auth.outputs.token }}
+      - id: config
+        name: Find Config Files
+        run: |-
+          config_file='.config/release-please/config.json'
+          manifest_file='.config/release-please/.manifest.json'
+          if [[ -f $config_file ]]; then
+            printf 'config-file=%s\n' "$config_file" >> "$GITHUB_OUTPUT"
+          fi
+          if [[ -f $manifest_file ]]; then
+            printf 'manifest-file=%s\n' "$manifest_file" >> "$GITHUB_OUTPUT"
+          fi
+      - if: ${{ steps.config.outputs.config-file && steps.config.outputs.manifest-file }}
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ steps.auth.outputs.token }}
+          config-file: ${{ steps.config.outputs.config-file }}
+          manifest-file: ${{ steps.config.outputs.manifest-file }}
+          repo-url: ${{ needs.inputs.outputs.full-name }}

@@ -2,13 +2,14 @@ import type { App } from "octokit";
 import { GITHUB_OWNER, GITHUB_REPO, TRUNCATED } from "./constants";
 
 export function onPullRequestReview(app: App): App {
-  app.webhooks.on("pull_request_review", async (event) => {
+  app.webhooks.on(["pull_request_review.dismissed"], async (event) => {
     const { octokit, payload } = event;
+    // ref: <https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#create-a-repository-dispatch-event>
+    // The total size of the JSON payload must be less than 64KB.
+    if (payload.pull_request.body) payload.pull_request.body = TRUNCATED;
     octokit.log.info(
       `${event.name}.${payload.action}: ${payload.repository.full_name}#${payload.pull_request.number}`,
     );
-    // limit payload size
-    if (payload.pull_request.body) payload.pull_request.body = TRUNCATED;
     await octokit.rest.repos.createDispatchEvent({
       owner: GITHUB_OWNER,
       repo: GITHUB_REPO,

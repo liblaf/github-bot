@@ -9,6 +9,7 @@
         "@scalar/hono-api-reference": "^0.9.13",
         "hono": "^4.8.12",
         "octokit": "^5.0.3",
+        "remeda": "^2.27.2",
         "ua-parser-js": "^2.0.4",
         "zod": "^4.0.14",
       },
@@ -532,6 +533,8 @@
 
     "readdirp": ["readdirp@4.1.2", "https://mirrors.huaweicloud.com/repository/npm/readdirp/-/readdirp-4.1.2.tgz", {}, "sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg=="],
 
+    "remeda": ["remeda@2.27.2", "https://mirrors.huaweicloud.com/repository/npm/remeda/-/remeda-2.27.2.tgz", { "dependencies": { "type-fest": "^4.41.0" } }, "sha512-y9rv/JnY1FnQu/BNhYIHgfcIiqx9jX1ohP/vQdME1DRBejRJIxcv5hY0MBPPjKN7za89Xzo8XZPynUszfvr/QQ=="],
+
     "replace-in-file": ["replace-in-file@8.3.0", "https://mirrors.huaweicloud.com/repository/npm/replace-in-file/-/replace-in-file-8.3.0.tgz", { "dependencies": { "chalk": "^5.3.0", "glob": "^10.4.2", "yargs": "^17.7.2" }, "bin": { "replace-in-file": "bin/cli.js" } }, "sha512-4VhddQiMCPIuypiwHDTM+XHjZoVu9h7ngBbSCnwGRcwdHwxltjt/m//Ep3GDwqaOx1fDSrKFQ+n7uo4uVcEz9Q=="],
 
     "require-directory": ["require-directory@2.1.1", "https://mirrors.huaweicloud.com/repository/npm/require-directory/-/require-directory-2.1.1.tgz", {}, "sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q=="],
@@ -577,6 +580,8 @@
     "ts-import-resolver": ["ts-import-resolver@0.1.23", "https://mirrors.huaweicloud.com/repository/npm/ts-import-resolver/-/ts-import-resolver-0.1.23.tgz", { "peerDependencies": { "typescript": ">=4.5.0" }, "optionalPeers": ["typescript"] }, "sha512-282pgr6j6aOvP3P2I6XugDxdBobkpdMmdbWjRjGl5gjPI1p0+oTNGDh1t924t75kRlyIkF65DiwhSIUysmyHQA=="],
 
     "tslib": ["tslib@2.8.1", "https://mirrors.huaweicloud.com/repository/npm/tslib/-/tslib-2.8.1.tgz", {}, "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="],
+
+    "type-fest": ["type-fest@4.41.0", "https://mirrors.huaweicloud.com/repository/npm/type-fest/-/type-fest-4.41.0.tgz", {}, "sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA=="],
 
     "typeroll": ["typeroll@0.6.22", "https://mirrors.huaweicloud.com/repository/npm/typeroll/-/typeroll-0.6.22.tgz", { "dependencies": { "@babel/parser": "^7.28.0", "@babel/types": "^7.28.1", "coffi": "^0.1.31", "oxc-minify": "^0.77.2", "oxc-resolver": "^8.0.0", "oxc-transform": "^0.67.0", "picocolors": "^1.1.1", "std-env": "^3.9.0", "ts-import-resolver": "^0.1.23" }, "peerDependencies": { "typescript": ">=4.5.0" }, "optionalPeers": ["typescript"] }, "sha512-hn8VF1o9UB2SULDCCoRh9wiLxcUIsE5cytqJ09nMRNug0/zg8AzEtaN94vxmWVa/PVjntMQkmN8oEU+lbndhvA=="],
 

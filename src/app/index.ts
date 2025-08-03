@@ -3,6 +3,7 @@ import { App } from "octokit";
 import { onCreate } from "./create";
 import { onPullRequest } from "./pull_request";
 import { onPullRequestReview } from "./pull_request_review";
+import { onPush } from "./push";
 import { onRepository } from "./repository";
 
 export type GitHubAppOptions = {
@@ -32,6 +33,7 @@ export function makeGitHubApp({
   onCreate(app);
   onPullRequest(app);
   onPullRequestReview(app);
+  onPush(app);
   onRepository(app);
   return app;
 }
