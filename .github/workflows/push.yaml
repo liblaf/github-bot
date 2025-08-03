@@ -51,17 +51,8 @@ jobs:
       actions: write
     runs-on: ubuntu-latest
     steps:
-      - id: workflow
-        name: Get Workflow File
-        run: |-
-          workflow_ref='${{ github.workflow_ref }}'
-          workflow_filepath="${workflow_ref%'@'*}"
-          workflow_filename="${workflow_filepath##*'/'}"
-          printf "filename=%s\n" "$workflow_filename" >> "$GITHUB_OUTPUT"
-      - uses: MercuryTechnologies/delete-cancelled-runs@1.0.0
-        with:
-          workflow-file: ${{ steps.workflow.outputs.filename }}
-          github-token: ${{ github.token }}
+      - name: Delete Cancelled Runs
+        uses: liblaf/actions/delete-cancelled-runs@main
 
   inputs:
     name: Inputs
@@ -132,7 +123,8 @@ jobs:
       - id: release-please
         if: ${{ steps.config.outputs.config-file && steps.config.outputs.manifest-file }}
         name: Release Please
-        uses: dsktschy/release-please-action@main
+        # TODO: switch back to official `googleapis/release-please-action` when <https://github.com/googleapis/release-please-action/pull/1123> is merged
+        uses: liblaf/release-please-action@main
         with:
           token: ${{ steps.auth.outputs.token }}
           config-file: ${{ steps.config.outputs.config-file }}
