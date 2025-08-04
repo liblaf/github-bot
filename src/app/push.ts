@@ -16,7 +16,7 @@ export function onPush(app: App): App {
       owner: GITHUB_OWNER,
       repo: GITHUB_REPO,
       event_type: event.name,
-      client_payload: R.pick(payload, ["ref", "repository"]),
+      client_payload: payload,
     });
   });
   return app;

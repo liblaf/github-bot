@@ -1,7 +1,7 @@
 name: (Webhook) repository.created
 
 run-name: >-
-  ${{ format('{0}: {1}/{2}', github.workflow, inputs.owner || github.event.client_payload.repositories.owner.login, inputs.repo || github.event.client_payload.repositories.name) }}
+  ${{ format('{0}: {1}/{2}', github.workflow, inputs.owner || github.event.client_payload.repository.owner.login, inputs.repo || github.event.client_payload.repository.name) }}
 
 on:
   repository_dispatch:
@@ -32,7 +32,7 @@ on:
 
 concurrency:
   group: >-
-    ${{ format('{0}: {1}/{2}', github.workflow, inputs.owner || github.event.client_payload.repositories.owner.login, inputs.repo || github.event.client_payload.repositories.name) }}
+    ${{ format('{0}: {1}/{2}', github.workflow, inputs.owner || github.event.client_payload.repository.owner.login, inputs.repo || github.event.client_payload.repository.name) }}
   cancel-in-progress: true
 
 jobs:

@@ -1,7 +1,7 @@
 name: (Webhook) pull_request
 
 run-name: >-
-  ${{ format('{0}: {1}/{2}#{3}', github.workflow, inputs.owner || github.event.client_payload.repositories.owner.login, inputs.repo || github.event.client_payload.repositories.name, inputs.number || github.event.client_payload.pull_request.number) }}
+  ${{ format('{0}: {1}/{2}#{3}', github.workflow, inputs.owner || github.event.client_payload.repository.owner.login, inputs.repo || github.event.client_payload.repository.name, inputs.number || github.event.client_payload.pull_request.number) }}
 
 on:
   workflow_call:
@@ -40,7 +40,7 @@ on:
 
 concurrency:
   group: >-
-    ${{ format('{0}: {1}/{2}#{3}', github.workflow, inputs.owner || github.event.client_payload.repositories.owner.login, inputs.repo || github.event.client_payload.repositories.name, inputs.number || github.event.client_payload.pull_request.number) }}
+    ${{ format('{0}: {1}/{2}#{3}', github.workflow, inputs.owner || github.event.client_payload.repository.owner.login, inputs.repo || github.event.client_payload.repository.name, inputs.number || github.event.client_payload.pull_request.number) }}
   cancel-in-progress: true
 
 jobs:
