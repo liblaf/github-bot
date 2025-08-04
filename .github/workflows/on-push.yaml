@@ -158,18 +158,18 @@ jobs:
           token: ${{ steps.auth.outputs.token }}
           fetch-depth: 0
       - id: tag
-        name: Parse Tag
+        name: Get Tag
         run: |-
-          title="${{ fromJson(needs.release-please.outputs.pr).title }}"
-          version=$(echo "$title" | awk '{ print $NF }')
-          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          title='${{ fromJson(needs.release-please.outputs.pr).title }}'
+          version="$(awk '{ print $NF }' <<< "$title")"
+          printf 'tag=%s\n' "v$version" >> "$GITHUB_OUTPUT"
       - name: Changelog
-        uses: liblaf/actions/changelog@main
+        uses: liblaf/actions-ts/changelog@dist
         with:
-          args: --tag "${{ steps.tag.outputs.tag }}"
+          args: --tag '${{ steps.tag.outputs.tag }}'
           output: CHANGELOG.md
       - name: Commit
-        uses: liblaf/actions/commit@main
+        uses: liblaf/actions-ts/commit@dist
         with:
           add-options: --verbose 'CHANGELOG.md'
           message: "chore(docs): update CHANGELOG.md"
@@ -203,14 +203,13 @@ jobs:
           fetch-depth: 0
       - id: changelog
         name: Changelog
-        uses: liblaf/actions/changelog@main
+        uses: liblaf/actions-ts/changelog@dist
         with:
           args: --current --strip all
       - name: Update Release
         run: >-
-          gh release
+          gh release --repo '${{ needs.inputs.outputs.full-name }}'
           edit '${{ needs.release-please.outputs.tag }}'
           --notes-file '${{ steps.changelog.outputs.changelog }}'
-          --repo '${{ needs.inputs.outputs.full-name }}'
         env:
           GH_TOKEN: ${{ steps.auth.outputs.token }}
