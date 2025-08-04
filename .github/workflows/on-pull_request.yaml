@@ -87,7 +87,7 @@ jobs:
           esac
 
   auto-merge:
-    name: Auto-Merge
+    name: Auto Merge
     needs:
       - inputs
     runs-on: ubuntu-latest
@@ -100,12 +100,13 @@ jobs:
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
           owner: ${{ needs.inputs.outputs.owner }}
           repositories: ${{ needs.inputs.outputs.repo }}
-      - name: Auto-Merge Renovate
-        uses: liblaf/actions/pr-label@main
+      - name: Auto Merge Renovate
+        uses: liblaf/actions-ts/pr-label@dist
         with:
-          add-label: automerge
-          app: renovate
-          repo: ${{ needs.inputs.outputs.full-name }}
+          add-labels: automerge
+          authors: renovate[bot]
+          pull-number: ${{ needs.inputs.outputs.number }}
+          repository: ${{ needs.inputs.outputs.full-name }}
           token: ${{ steps.auth.outputs.token }}
 
   auto-approve:
