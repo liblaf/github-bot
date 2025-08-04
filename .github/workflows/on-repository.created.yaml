@@ -108,22 +108,22 @@ jobs:
       - id: branches
         name: Get Branches
         run: |-
-          n_branches="$(gh api "/repos/${{ needs.inputs.outputs.full-name }}/branches" --jq 'length')"
-          echo "n_branches=$n_branches" >> "$GITHUB_OUTPUT"
+          n-branches="$(gh api "/repos/${{ needs.inputs.outputs.full-name }}/branches" --jq 'length')"
+          printf 'n-branches=%s\n' "$n-branches" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ steps.auth.outputs.token }}
-      - if: ${{ steps.branches.outputs.n_branches > 0 }}
+      - if: ${{ steps.branches.outputs.n-branches > 0 }}
         name: Checkout
         uses: actions/checkout@v4
         with:
           repository: ${{ needs.inputs.outputs.full-name }}
           token: ${{ steps.auth.outputs.token }}
-      - if: ${{ steps.branches.outputs.n_branches > 0 }}
+      - if: ${{ steps.branches.outputs.n-branches > 0 }}
         name: Copier Update
         uses: liblaf/actions/copier-update@main
-      - if: ${{ steps.branches.outputs.n_branches > 0 }}
+      - if: ${{ steps.branches.outputs.n-branches > 0 }}
         name: Commit
-        uses: liblaf/actions/commit@main
+        uses: liblaf/actions-ts/commit@main
         with:
           add-options: --verbose --all
           message: "chore(copier): update from template"
