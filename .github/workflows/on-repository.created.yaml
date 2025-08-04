@@ -206,9 +206,25 @@ jobs:
             gh secret --repo '${{ needs.inputs.outputs.full-name }}' set "$1" --body "$2"
           }
           secret-set CARGO_REGISTRY_TOKEN '${{ secrets.CARGO_REGISTRY_TOKEN }}'
+          secret-set DOCKERHUB_TOKEN '${{ secrets.DOCKERHUB_TOKEN }}'
           secret-set GH_APP_ID '${{ secrets.GH_APP_ID }}'
           secret-set GH_APP_PRIVATE_KEY '${{ secrets.GH_APP_PRIVATE_KEY }}'
           secret-set GH_PAT '${{ secrets.GH_PAT }}'
           secret-set NPM_TOKEN '${{ secrets.NPM_TOKEN }}'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+
+  variables:
+    name: Variables
+    needs:
+      - inputs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create or Update Variables
+        run: |-
+          function variable-set() {
+            gh variable set --repo '${{ needs.inputs.outputs.full-name }}' "$1" --body "$2"
+          }
+          variable-set DOCKERHUB_USERNAME '${{ secrets.DOCKERHUB_USERNAME }}'
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
