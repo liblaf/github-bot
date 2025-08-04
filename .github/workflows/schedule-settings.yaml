@@ -1,0 +1,40 @@
+name: (Schedule) Sync Repo Settings
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_call:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  pre:
+    name: Pre
+    permissions:
+      actions: write
+    runs-on: ubuntu-latest
+    outputs:
+      should-skip: ${{ steps.pre.outputs.should-skip }}
+    steps:
+      - id: pre
+        name: Pre
+        uses: liblaf/actions-ts/pre@dist
+
+  settings:
+    name: Sync Repository Settings
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync Settings
+        run: |-
+          gh repo list '${{ github.repository_owner }}' --jq '.[].nameWithOwner' \
+            --json 'nameWithOwner' --limit 1000 --no-archived --source |
+            while read -r full_name; do
+              owner="${full_name%'/'*}"
+              repo="${full_name#*'/'}"
+              gh workflow --repo '${{ github.repository }}' run \
+                'on-repository.created.yaml' \
+                --field owner="$owner" --field repo="$repo"
+            done
