@@ -27,6 +27,13 @@ jobs:
     name: Sync Repository Settings
     runs-on: ubuntu-latest
     steps:
+      - id: auth
+        name: Authenticate
+        uses: liblaf/actions-ts/authenticate@dist
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
       - name: Sync Settings
         run: |-
           gh repo list '${{ github.repository_owner }}' --jq '.[].nameWithOwner' \
@@ -38,3 +45,5 @@ jobs:
                 'on-repository.created.yaml' \
                 --field owner="$owner" --field repo="$repo"
             done
+        env:
+          GH_TOKEN: ${{ steps.auth.outputs.token }}

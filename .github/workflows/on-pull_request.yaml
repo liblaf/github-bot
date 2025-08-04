@@ -93,8 +93,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: auth
-        name: Auth App
-        uses: liblaf/actions/auth-app@main
+        name: Authenticate
+        uses: liblaf/actions-ts/authenticate@dist
         with:
           app-id: ${{ secrets.GH_APP_ID }}
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
