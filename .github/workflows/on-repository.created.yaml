@@ -108,8 +108,8 @@ jobs:
       - id: branches
         name: Get Branches
         run: |-
-          n-branches="$(gh api "/repos/${{ needs.inputs.outputs.full-name }}/branches" --jq 'length')"
-          printf 'n-branches=%s\n' "$n-branches" >> "$GITHUB_OUTPUT"
+          n_branches="$(gh api "/repos/${{ needs.inputs.outputs.full-name }}/branches" --jq 'length')"
+          printf 'n-branches=%s\n' "$n_branches" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ steps.auth.outputs.token }}
       - if: ${{ steps.branches.outputs.n-branches > 0 }}
@@ -225,6 +225,6 @@ jobs:
           function variable-set() {
             gh variable set --repo '${{ needs.inputs.outputs.full-name }}' "$1" --body "$2"
           }
-          variable-set DOCKERHUB_USERNAME '${{ secrets.DOCKERHUB_USERNAME }}'
+          variable-set DOCKERHUB_USERNAME '${{ vars.DOCKERHUB_USERNAME }}'
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
