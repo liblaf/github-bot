@@ -1,7 +1,7 @@
-name: pull_request
+name: (Webhook) pull_request
 
 run-name: >-
-  ${{ github.workflow }}: ${{ inputs.owner || github.event.client_payload.repository.owner.login }}/${{ inputs.repo || github.event.client_payload.repository.name }}#${{ inputs.number || github.event.client_payload.number }}
+  ${{ format('{0}: {1}/{2}#{3}', github.workflow, inputs.owner || github.event.client_payload.repositories.owner.login, inputs.repo || github.event.client_payload.repositories.name, inputs.number || github.event.client_payload.pull_request.number) }}
 
 on:
   workflow_call:
@@ -40,18 +40,21 @@ on:
 
 concurrency:
   group: >-
-    ${{ github.workflow }}: ${{ inputs.owner || github.event.client_payload.repository.owner.login }}/${{ inputs.repo || github.event.client_payload.repository.name }}#${{ inputs.number || github.event.client_payload.pull_request.number }}
+    ${{ format('{0}: {1}/{2}#{3}', github.workflow, inputs.owner || github.event.client_payload.repositories.owner.login, inputs.repo || github.event.client_payload.repositories.name, inputs.number || github.event.client_payload.pull_request.number) }}
   cancel-in-progress: true
 
 jobs:
-  delete-cancelled-runs:
-    name: Delete Cancelled Runs
+  pre:
+    name: Pre
     permissions:
       actions: write
     runs-on: ubuntu-latest
+    outputs:
+      should-skip: ${{ steps.pre.outputs.should-skip }}
     steps:
-      - name: Delete Cancelled Runs
-        uses: liblaf/actions/delete-cancelled-runs@main
+      - id: pre
+        name: Pre
+        uses: liblaf/actions-ts/pre@dist
 
   inputs:
     name: Inputs
@@ -111,14 +114,6 @@ jobs:
       - inputs
     runs-on: ubuntu-latest
     steps:
-      - id: auth
-        name: Authenticate
-        uses: liblaf/actions/auth-app@main
-        with:
-          app-id: ${{ secrets.GH_APP_ID }}
-          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
-          owner: ${{ needs.inputs.outputs.owner }}
-          repositories: ${{ needs.inputs.outputs.repo }}
       - name: Auto Approve Renovate
         uses: liblaf/actions-ts/approve@dist
         with:

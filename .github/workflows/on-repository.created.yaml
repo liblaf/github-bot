@@ -1,7 +1,7 @@
-name: repository.created
+name: (Webhook) repository.created
 
 run-name: >-
-  ${{ github.workflow }}: ${{ github.workflow }}: ${{ inputs.owner || github.event.client_payload.repositories.owner.login }}/${{ inputs.repo || github.event.client_payload.repositories.name }}
+  ${{ format('{0}: {1}/{2}', github.workflow, inputs.owner || github.event.client_payload.repositories.owner.login, inputs.repo || github.event.client_payload.repositories.name) }}
 
 on:
   repository_dispatch:
@@ -32,18 +32,21 @@ on:
 
 concurrency:
   group: >-
-    ${{ github.workflow }}: ${{ inputs.owner || github.event.client_payload.repositories.owner.login }}/${{ inputs.repo || github.event.client_payload.repositories.name }}
+    ${{ format('{0}: {1}/{2}', github.workflow, inputs.owner || github.event.client_payload.repositories.owner.login, inputs.repo || github.event.client_payload.repositories.name) }}
   cancel-in-progress: true
 
 jobs:
-  delete-cancelled-runs:
-    name: Delete Cancelled Runs
+  pre:
+    name: Pre
     permissions:
       actions: write
     runs-on: ubuntu-latest
+    outputs:
+      should-skip: ${{ steps.pre.outputs.should-skip }}
     steps:
-      - name: Delete Cancelled Runs
-        uses: liblaf/actions/delete-cancelled-runs@main
+      - id: pre
+        name: Pre
+        uses: liblaf/actions-ts/pre@dist
 
   inputs:
     name: Inputs
