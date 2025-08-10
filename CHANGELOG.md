@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.0.2](https://github.com/liblaf/github-bot/compare/v0.0.1..v0.0.2) - 2025-08-10
+
+### 🐛 Bug Fixes
+
+- **ci:** standardize variable naming and usage - ([4879736](https://github.com/liblaf/github-bot/commit/48797361e42c21a707872b5bab09be3af10ceff6))
+- **workflows:** correct repository variable references - ([4f821f9](https://github.com/liblaf/github-bot/commit/4f821f9c95af6f7ceac85b3785618247606d56f6))
+
+### 📝 Documentation
+
+- **workflows:** clarify cron schedule timing - ([104990a](https://github.com/liblaf/github-bot/commit/104990a06220ff2915a0882d01377002253d15eb))
+
+### 🔧 Continuous Integration
+
+- **repository:** add DockerHub secrets and variables - ([f31b7a4](https://github.com/liblaf/github-bot/commit/f31b7a4aceaf12afed8da35e4795c3c70f08ba66))
+- **workflows:** make owner and ref inputs optional in push workflow - ([a2a057e](https://github.com/liblaf/github-bot/commit/a2a057ed9bb7facf40cbdfd322527d89d1335131))
+- **workflows:** improve repository creation workflow - ([a75524e](https://github.com/liblaf/github-bot/commit/a75524ed6e0e0be5a86e11a9061c8ad9175370a4))
+- update GitHub Actions references - ([14cb2f0](https://github.com/liblaf/github-bot/commit/14cb2f0953350fc9a1ac8756f633493559a5729b))
+
+### ❤️ New Contributors
+
+- [@liblaf-bot[bot]](https://github.com/apps/liblaf-bot) made their first contribution
+- [@renovate[bot]](https://github.com/apps/renovate) made their first contribution in [#5](https://github.com/liblaf/github-bot/pull/5)
+- [@liblaf](https://github.com/liblaf) made their first contribution
+
 ## [0.0.1](https://github.com/liblaf/github-bot/compare/v0.0.0..v0.0.1) - 2025-08-04
 
 ### ✨ Features
@@ -28,7 +52,7 @@
 
 ### ❤️ New Contributors
 
-- [@liblaf](https://github.com/liblaf) made their first contribution
+- [@github-actions[bot]](https://github.com/apps/github-actions) made their first contribution in [#3](https://github.com/liblaf/github-bot/pull/3)
 
 ## [0.0.0] - 2025-08-03
 
