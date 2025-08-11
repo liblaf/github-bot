@@ -108,7 +108,7 @@ jobs:
           owner: ${{ needs.inputs.outputs.owner }}
           repositories: ${{ needs.inputs.outputs.repo }}
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ${{ needs.inputs.outputs.full-name }}
           ref: ${{ needs.inputs.outputs.ref }}
@@ -152,7 +152,7 @@ jobs:
           owner: ${{ needs.inputs.outputs.owner }}
           repositories: ${{ needs.inputs.outputs.repo }}
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ${{ needs.inputs.outputs.full-name }}
           ref: ${{ fromJson(needs.release-please.outputs.pr).headBranchName }}
@@ -196,7 +196,7 @@ jobs:
           owner: ${{ needs.inputs.outputs.owner }}
           repositories: ${{ needs.inputs.outputs.repo }}
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ${{ needs.inputs.outputs.full-name }}
           ref: ${{ needs.release-please.outputs.tag }}
