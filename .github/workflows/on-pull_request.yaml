@@ -86,29 +86,6 @@ jobs:
               ;;
           esac
 
-  auto-merge:
-    name: Auto Merge
-    needs:
-      - inputs
-    runs-on: ubuntu-latest
-    steps:
-      - id: auth
-        name: Authenticate
-        uses: liblaf/actions-ts/authenticate@dist
-        with:
-          app-id: ${{ secrets.GH_APP_ID }}
-          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
-          owner: ${{ needs.inputs.outputs.owner }}
-          repositories: ${{ needs.inputs.outputs.repo }}
-      - name: Auto Merge Renovate
-        uses: liblaf/actions-ts/pr-label@dist
-        with:
-          add-labels: automerge
-          authors: renovate[bot]
-          pull-number: ${{ needs.inputs.outputs.number }}
-          repository: ${{ needs.inputs.outputs.full-name }}
-          token: ${{ steps.auth.outputs.token }}
-
   auto-approve:
     name: Auto Approve
     needs:
@@ -119,6 +96,13 @@ jobs:
         uses: liblaf/actions-ts/approve@dist
         with:
           authors: renovate[bot]
+          pull-number: ${{ needs.inputs.outputs.number }}
+          repository: ${{ needs.inputs.outputs.full-name }}
+          token: ${{ secrets.GH_PAT }}
+      - name: Auto Approve Fixes
+        uses: liblaf/actions-ts/approve@dist
+        with:
+          labels: autofix
           pull-number: ${{ needs.inputs.outputs.number }}
           repository: ${{ needs.inputs.outputs.full-name }}
           token: ${{ secrets.GH_PAT }}
