@@ -167,8 +167,9 @@ jobs:
       - name: Changelog
         uses: liblaf/actions-ts/changelog@dist
         with:
-          args: --tag '${{ steps.tag.outputs.tag }}'
           output: CHANGELOG.md
+          repository: ${{ needs.inputs.outputs.full-name }}
+          args: --tag '${{ steps.tag.outputs.tag }}'
       - name: Commit
         uses: liblaf/actions-ts/commit@dist
         with:
@@ -206,6 +207,7 @@ jobs:
         name: Changelog
         uses: liblaf/actions-ts/changelog@dist
         with:
+          repository: ${{ needs.inputs.outputs.full-name }}
           args: --current --strip all
       - name: Update Release
         run: >-
