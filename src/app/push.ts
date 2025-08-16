@@ -8,6 +8,7 @@ export function onPush(app: App): App {
     // ref: <https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#create-a-repository-dispatch-event>
     // The maximum number of top-level properties is 10.
     const payload = R.pick(event.payload, ["ref", "repository"]);
+    if (payload.repository.fork) return;
     if (payload.ref !== "refs/heads/main") return;
     octokit.log.info(
       `${event.name}.${payload.ref}: ${payload.repository.full_name}@${payload.ref}`,

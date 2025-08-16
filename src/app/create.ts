@@ -4,6 +4,7 @@ import { GITHUB_OWNER, GITHUB_REPO } from "./constants";
 export function onCreate(app: App): App {
   app.webhooks.on("create", async (event) => {
     const { octokit, payload } = event;
+    if (payload.repository.fork) return;
     octokit.log.info(
       `${event.name}: ${payload.repository.full_name} (${payload.ref})`,
     );

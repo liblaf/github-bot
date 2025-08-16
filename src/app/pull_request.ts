@@ -10,6 +10,7 @@ export function onPullRequest(app: App): App {
     ],
     async (event) => {
       const { octokit, payload } = event;
+      if (payload.repository.fork) return;
       // ref: <https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#create-a-repository-dispatch-event>
       // The total size of the JSON payload must be less than 64KB.
       if (payload.pull_request.body) payload.pull_request.body = TRUNCATED;
