@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.0.3](https://github.com/liblaf/github-bot/compare/v0.0.2..v0.0.3) - 2025-08-17
+
+### 🐛 Bug Fixes
+
+- **event-handling:** skip processing events from forked repositories - ([52c44cd](https://github.com/liblaf/github-bot/commit/52c44cd862796cb06f54268e6f3f39dd3f8a679f))
+- **workflows:** ensure repository context for changelog generation in on-push workflow - ([c3c06b0](https://github.com/liblaf/github-bot/commit/c3c06b0b63c0fea2faabddbaf22df68fc9e08a70))
+
+### 🔧 Continuous Integration
+
+- remove automerge and extend auto-approve for autofix PRs - ([b666494](https://github.com/liblaf/github-bot/commit/b6664948117d74120367d2f2648e964ccbe254ef))
+
+### ❤️ New Contributors
+
+- [@liblaf-bot[bot]](https://github.com/apps/liblaf-bot) made their first contribution
+- [@liblaf](https://github.com/liblaf) made their first contribution
+- [@renovate[bot]](https://github.com/apps/renovate) made their first contribution in [#6](https://github.com/liblaf/github-bot/pull/6)
+
 ## [0.0.2](https://github.com/liblaf/github-bot/compare/v0.0.1..v0.0.2) - 2025-08-10
 
 ### 🐛 Bug Fixes
@@ -20,9 +37,7 @@
 
 ### ❤️ New Contributors
 
-- [@liblaf-bot[bot]](https://github.com/apps/liblaf-bot) made their first contribution
 - [@renovate[bot]](https://github.com/apps/renovate) made their first contribution in [#5](https://github.com/liblaf/github-bot/pull/5)
-- [@liblaf](https://github.com/liblaf) made their first contribution
 
 ## [0.0.1](https://github.com/liblaf/github-bot/compare/v0.0.0..v0.0.1) - 2025-08-04
 
