@@ -127,8 +127,11 @@ jobs:
       - id: release-please
         if: ${{ steps.config.outputs.config-file && steps.config.outputs.manifest-file }}
         name: Release Please
-        # TODO: switch back to official `googleapis/release-please-action` when <https://github.com/googleapis/release-please-action/pull/1123> is merged
-        uses: liblaf/release-please-action@main
+        # TODO: switch back to official `googleapis/release-please-action` until <https://github.com/googleapis/release-please-action/issues/867> is resolved
+        # ref: <https://github.com/googleapis/release-please-action/pull/1132#issuecomment-3206113280>
+        # > As apparent from [googleapis/release-please#2545](https://github.com/googleapis/release-please/issues/2545) and [#1078](https://github.com/googleapis/release-please-action/issues/1078), this project is not actively maintained (especially the action itself).
+        # Maybe I should consider migrating to community maintained alternatives in the future.
+        uses: release-please-oss/release-please-action@main
         with:
           token: ${{ steps.auth.outputs.token }}
           config-file: ${{ steps.config.outputs.config-file }}
