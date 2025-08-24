@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.0.4](https://github.com/liblaf/github-bot/compare/v0.0.3..v0.0.4) - 2025-08-24
+
+### 🔧 Continuous Integration
+
+- **release-please:** switch to community-maintained fork - ([487b761](https://github.com/liblaf/github-bot/commit/487b761ab5768f81f6dff58bc96dd054a3fedf47))
+
+### ❤️ New Contributors
+
+- [@liblaf-bot[bot]](https://github.com/apps/liblaf-bot) made their first contribution
+- [@liblaf](https://github.com/liblaf) made their first contribution
+
 ## [0.0.3](https://github.com/liblaf/github-bot/compare/v0.0.2..v0.0.3) - 2025-08-17
 
 ### 🐛 Bug Fixes
@@ -10,12 +21,6 @@
 ### 🔧 Continuous Integration
 
 - remove automerge and extend auto-approve for autofix PRs - ([b666494](https://github.com/liblaf/github-bot/commit/b6664948117d74120367d2f2648e964ccbe254ef))
-
-### ❤️ New Contributors
-
-- [@liblaf-bot[bot]](https://github.com/apps/liblaf-bot) made their first contribution
-- [@liblaf](https://github.com/liblaf) made their first contribution
-- [@renovate[bot]](https://github.com/apps/renovate) made their first contribution in [#6](https://github.com/liblaf/github-bot/pull/6)
 
 ## [0.0.2](https://github.com/liblaf/github-bot/compare/v0.0.1..v0.0.2) - 2025-08-10
 
