@@ -114,6 +114,19 @@ jobs:
           repository: ${{ needs.inputs.outputs.repo }}
           token: ${{ steps.auth.outputs.token }}
 
+  environment:
+    name: Environment
+    needs:
+      - inputs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Environment PyPI
+        run: >-
+          gh api '/repos/${{ needs.inputs.outputs.repository }}/environments/PyPI'
+          --method PUT
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+
   label:
     name: Label
     needs:
@@ -180,6 +193,7 @@ jobs:
   secrets:
     name: Secrets
     needs:
+      - environment
       - inputs
     runs-on: ubuntu-latest
     steps:
@@ -200,6 +214,7 @@ jobs:
   variables:
     name: Variables
     needs:
+      - environment
       - inputs
     runs-on: ubuntu-latest
     steps:
