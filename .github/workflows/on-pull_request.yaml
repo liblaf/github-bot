@@ -38,48 +38,31 @@ on:
       - pull_request.reopened
       - pull_request.synchronize
 
-concurrency:
-  group: >-
-    ${{ format('{0}: {1}/{2}#{3}', github.workflow, inputs.owner || github.event.client_payload.repository.owner.login, inputs.repo || github.event.client_payload.repository.name, inputs.number || github.event.client_payload.pull_request.number) }}
-  cancel-in-progress: true
-
 jobs:
-  pre:
-    name: Pre
-    permissions:
-      actions: write
-    runs-on: ubuntu-latest
-    outputs:
-      should-skip: ${{ steps.pre.outputs.should-skip }}
-    steps:
-      - id: pre
-        name: Pre
-        uses: liblaf/actions-ts/pre@dist
-
   inputs:
     name: Inputs
     runs-on: ubuntu-latest
     outputs:
-      full-name: ${{ steps.inputs.outputs.full-name }}
       number: ${{ steps.inputs.outputs.number }}
       owner: ${{ steps.inputs.outputs.owner }}
       repo: ${{ steps.inputs.outputs.repo }}
+      repository: ${{ steps.inputs.outputs.repository }}
     steps:
       - id: inputs
         name: Parse Inputs
         run: |-
           case '${{ github.event_name }}' in
             'repository_dispatch')
-              printf 'full-name=%s\n' '${{ github.event.client_payload.repository.full_name }}' >> "$GITHUB_OUTPUT"
               printf 'number=%s\n' '${{ github.event.client_payload.number }}' >> "$GITHUB_OUTPUT"
               printf 'owner=%s\n' '${{ github.event.client_payload.repository.owner.login }}' >> "$GITHUB_OUTPUT"
               printf 'repo=%s\n' '${{ github.event.client_payload.repository.name }}' >> "$GITHUB_OUTPUT"
+              printf 'repository=%s\n' '${{ github.event.client_payload.repository.full_name }}' >> "$GITHUB_OUTPUT"
               ;;
             'workflow_call' | 'workflow_dispatch')
-              printf 'full-name=%s\n' '${{ inputs.owner }}/${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
               printf 'number=%s\n' '${{ inputs.number }}' >> "$GITHUB_OUTPUT"
               printf 'owner=%s\n' '${{ inputs.owner }}' >> "$GITHUB_OUTPUT"
               printf 'repo=%s\n' '${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
+              printf 'repository=%s\n' '${{ inputs.owner }}/${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
               ;;
             *)
               echo '::error::Unsupported event name: ${{ github.event_name }}'
@@ -93,16 +76,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Auto Approve Renovate
-        uses: liblaf/actions-ts/approve@dist
+        uses: liblaf/actions/approve@dist
         with:
           authors: renovate[bot]
           pull-number: ${{ needs.inputs.outputs.number }}
-          repository: ${{ needs.inputs.outputs.full-name }}
+          repository: ${{ needs.inputs.outputs.repository }}
           token: ${{ secrets.GH_PAT }}
       - name: Auto Approve Fixes
-        uses: liblaf/actions-ts/approve@dist
+        uses: liblaf/actions/approve@dist
         with:
           labels: autofix
           pull-number: ${{ needs.inputs.outputs.number }}
-          repository: ${{ needs.inputs.outputs.full-name }}
+          repository: ${{ needs.inputs.outputs.repository }}
           token: ${{ secrets.GH_PAT }}

@@ -40,29 +40,12 @@ on:
     types:
       - push
 
-concurrency:
-  group: >-
-    ${{ format('{0}: {1}/{2}@{3}', github.workflow, inputs.owner || github.event.client_payload.repository.owner.login, inputs.repo || github.event.client_payload.repository.name, inputs.ref || github.event.client_payload.ref) }}
-  cancel-in-progress: true
-
 jobs:
-  pre:
-    name: Pre
-    permissions:
-      actions: write
-    runs-on: ubuntu-latest
-    outputs:
-      should-skip: ${{ steps.pre.outputs.should-skip }}
-    steps:
-      - id: pre
-        name: Pre
-        uses: liblaf/actions-ts/pre@dist
-
   inputs:
     name: Inputs
     runs-on: ubuntu-latest
     outputs:
-      full-name: ${{ steps.inputs.outputs.full-name }}
+      repository: ${{ steps.inputs.outputs.repository }}
       owner: ${{ steps.inputs.outputs.owner }}
       ref: ${{ steps.inputs.outputs.ref }}
       repo: ${{ steps.inputs.outputs.repo }}
@@ -72,16 +55,16 @@ jobs:
         run: |-
           case '${{ github.event_name }}' in
             'repository_dispatch')
-              printf 'full-name=%s\n' '${{ github.event.client_payload.repository.full_name }}' >> "$GITHUB_OUTPUT"
               printf 'owner=%s\n' '${{ github.event.client_payload.repository.owner.login }}' >> "$GITHUB_OUTPUT"
               printf 'ref=%s\n' '${{ github.event.client_payload.ref }}' >> "$GITHUB_OUTPUT"
               printf 'repo=%s\n' '${{ github.event.client_payload.repository.name }}' >> "$GITHUB_OUTPUT"
+              printf 'repository=%s\n' '${{ github.event.client_payload.repository.full_name }}' >> "$GITHUB_OUTPUT"
               ;;
             'workflow_call' | 'workflow_dispatch')
-              printf 'full-name=%s\n' '${{ inputs.owner }}/${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
               printf 'owner=%s\n' '${{ inputs.owner }}' >> "$GITHUB_OUTPUT"
               printf 'ref=%s\n' '${{ inputs.ref }}' >> "$GITHUB_OUTPUT"
               printf 'repo=%s\n' '${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
+              printf 'repository=%s\n' '${{ inputs.owner }}/${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
               ;;
             *)
               echo '::error::Unsupported event name: ${{ github.event_name }}'
@@ -101,7 +84,7 @@ jobs:
     steps:
       - id: auth
         name: Authenticate
-        uses: liblaf/actions-ts/authenticate@dist
+        uses: liblaf/actions/authenticate@dist
         with:
           app-id: ${{ secrets.GH_APP_ID }}
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
@@ -110,7 +93,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
         with:
-          repository: ${{ needs.inputs.outputs.full-name }}
+          repository: ${{ needs.inputs.outputs.repository }}
           ref: ${{ needs.inputs.outputs.ref }}
           token: ${{ steps.auth.outputs.token }}
       - id: config
@@ -136,7 +119,7 @@ jobs:
           token: ${{ steps.auth.outputs.token }}
           config-file: ${{ steps.config.outputs.config-file }}
           manifest-file: ${{ steps.config.outputs.manifest-file }}
-          repo-url: ${{ needs.inputs.outputs.full-name }}
+          repo-url: ${{ needs.inputs.outputs.repository }}
 
   changelog-pr:
     name: Changelog (PR)
@@ -148,7 +131,7 @@ jobs:
     steps:
       - id: auth
         name: Authenticate
-        uses: liblaf/actions-ts/authenticate@dist
+        uses: liblaf/actions/authenticate@dist
         with:
           app-id: ${{ secrets.GH_APP_ID }}
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
@@ -157,7 +140,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
         with:
-          repository: ${{ needs.inputs.outputs.full-name }}
+          repository: ${{ needs.inputs.outputs.repository }}
           ref: ${{ fromJson(needs.release-please.outputs.pr).headBranchName }}
           token: ${{ steps.auth.outputs.token }}
           fetch-depth: 0
@@ -168,13 +151,13 @@ jobs:
           version="$(awk '{ print $NF }' <<< "$title")"
           printf 'tag=%s\n' "v$version" >> "$GITHUB_OUTPUT"
       - name: Changelog
-        uses: liblaf/actions-ts/changelog@dist
+        uses: liblaf/actions/changelog@dist
         with:
           output: CHANGELOG.md
-          repository: ${{ needs.inputs.outputs.full-name }}
+          repository: ${{ needs.inputs.outputs.repository }}
           args: --tag '${{ steps.tag.outputs.tag }}'
       - name: Commit
-        uses: liblaf/actions-ts/commit@dist
+        uses: liblaf/actions/commit@dist
         with:
           add-options: --verbose 'CHANGELOG.md'
           message: "chore(docs): update CHANGELOG.md"
@@ -193,7 +176,7 @@ jobs:
     steps:
       - id: auth
         name: Authenticate
-        uses: liblaf/actions-ts/authenticate@dist
+        uses: liblaf/actions/authenticate@dist
         with:
           app-id: ${{ secrets.GH_APP_ID }}
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
@@ -202,19 +185,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
         with:
-          repository: ${{ needs.inputs.outputs.full-name }}
+          repository: ${{ needs.inputs.outputs.repository }}
           ref: ${{ needs.release-please.outputs.tag }}
           token: ${{ steps.auth.outputs.token }}
           fetch-depth: 0
       - id: changelog
         name: Changelog
-        uses: liblaf/actions-ts/changelog@dist
+        uses: liblaf/actions/changelog@dist
         with:
-          repository: ${{ needs.inputs.outputs.full-name }}
+          repository: ${{ needs.inputs.outputs.repository }}
           args: --current --strip all
       - name: Update Release
         run: >-
-          gh release --repo '${{ needs.inputs.outputs.full-name }}'
+          gh release --repo '${{ needs.inputs.outputs.repository }}'
           edit '${{ needs.release-please.outputs.tag }}'
           --notes-file '${{ steps.changelog.outputs.changelog }}'
         env:

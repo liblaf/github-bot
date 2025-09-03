@@ -30,45 +30,28 @@ on:
         required: true
         type: string
 
-concurrency:
-  group: >-
-    ${{ format('{0}: {1}/{2}', github.workflow, inputs.owner || github.event.client_payload.repository.owner.login, inputs.repo || github.event.client_payload.repository.name) }}
-  cancel-in-progress: true
-
 jobs:
-  pre:
-    name: Pre
-    permissions:
-      actions: write
-    runs-on: ubuntu-latest
-    outputs:
-      should-skip: ${{ steps.pre.outputs.should-skip }}
-    steps:
-      - id: pre
-        name: Pre
-        uses: liblaf/actions-ts/pre@dist
-
   inputs:
     name: Inputs
     runs-on: ubuntu-latest
     outputs:
-      full-name: ${{ steps.inputs.outputs.full-name }}
       owner: ${{ steps.inputs.outputs.owner }}
       repo: ${{ steps.inputs.outputs.repo }}
+      repository: ${{ steps.inputs.outputs.repository }}
     steps:
       - id: inputs
         name: Parse Inputs
         run: |-
           case '${{ github.event_name }}' in
             'repository_dispatch')
-              printf 'full-name=%s\n' '${{ github.event.client_payload.repository.full_name }}' >> "$GITHUB_OUTPUT"
               printf 'owner=%s\n' '${{ github.event.client_payload.repository.owner.login }}' >> "$GITHUB_OUTPUT"
               printf 'repo=%s\n' '${{ github.event.client_payload.repository.name }}' >> "$GITHUB_OUTPUT"
+              printf 'repository=%s\n' '${{ github.event.client_payload.repository.full_name }}' >> "$GITHUB_OUTPUT"
               ;;
             'workflow_call' | 'workflow_dispatch')
-              printf 'full-name=%s\n' '${{ inputs.owner }}/${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
               printf 'owner=%s\n' '${{ inputs.owner }}' >> "$GITHUB_OUTPUT"
               printf 'repo=%s\n' '${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
+              printf 'repository=%s\n' '${{ inputs.owner }}/${{ inputs.repo }}' >> "$GITHUB_OUTPUT"
               ;;
             *)
               echo '::error::Unsupported event name: ${{ github.event_name }}'
@@ -84,7 +67,7 @@ jobs:
       - name: Set Default Workflow Permissions
         # ref: <https://docs.github.com/en/rest/actions/permissions#set-default-workflow-permissions-for-a-repository>
         run: >-
-          gh api '/repos/${{ needs.inputs.outputs.full-name }}/actions/permissions/workflow'
+          gh api '/repos/${{ needs.inputs.outputs.repository }}/actions/permissions/workflow'
           --field default_workflow_permissions='read'
           --field can_approve_pull_request_reviews=true
           --method PUT
@@ -99,7 +82,7 @@ jobs:
     steps:
       - id: auth
         name: Authenticate
-        uses: liblaf/actions-ts/authenticate@dist
+        uses: liblaf/actions/authenticate@dist
         with:
           app-id: ${{ secrets.GH_APP_ID }}
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
@@ -108,7 +91,7 @@ jobs:
       - id: branches
         name: Get Branches
         run: |-
-          n_branches="$(gh api "/repos/${{ needs.inputs.outputs.full-name }}/branches" --jq 'length')"
+          n_branches="$(gh api "/repos/${{ needs.inputs.outputs.repository }}/branches" --jq 'length')"
           printf 'n-branches=%s\n' "$n_branches" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ steps.auth.outputs.token }}
@@ -116,14 +99,14 @@ jobs:
         name: Checkout
         uses: actions/checkout@v5
         with:
-          repository: ${{ needs.inputs.outputs.full-name }}
+          repository: ${{ needs.inputs.outputs.repository }}
           token: ${{ steps.auth.outputs.token }}
       - if: ${{ steps.branches.outputs.n-branches > 0 }}
         name: Copier Update
-        uses: liblaf/actions-ts/copier-update@dist
+        uses: liblaf/actions/copier-update@dist
       - if: ${{ steps.branches.outputs.n-branches > 0 }}
         name: Commit
-        uses: liblaf/actions-ts/commit@dist
+        uses: liblaf/actions/commit@dist
         with:
           add-options: --verbose --all
           message: "chore(copier): update from template"
@@ -139,7 +122,7 @@ jobs:
     steps:
       - id: auth
         name: Authenticate
-        uses: liblaf/actions-ts/authenticate@dist
+        uses: liblaf/actions/authenticate@dist
         with:
           app-id: ${{ secrets.GH_APP_ID }}
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
@@ -156,7 +139,7 @@ jobs:
           --access-token '${{ steps.auth.outputs.token }}'
           --labels 'labels.yaml'
           --allow-added-labels
-          '${{ needs.inputs.outputs.full-name }}'
+          '${{ needs.inputs.outputs.repository }}'
 
   repo:
     name: Repo
@@ -166,7 +149,7 @@ jobs:
     steps:
       - name: Edit Repository Setttings
         run: >-
-          gh repo edit '${{ needs.inputs.outputs.full-name }}'
+          gh repo edit '${{ needs.inputs.outputs.repository }}'
           --allow-update-branch
           --delete-branch-on-merge
           --enable-auto-merge
@@ -187,11 +170,11 @@ jobs:
     steps:
       - name: Ruleset Import
         # TODO: switch to gh cli until <https://github.com/cli/cli/issues/8019> is resolved
-        uses: liblaf/actions-ts/ruleset-import@dist
+        uses: liblaf/actions/ruleset-import@dist
         with:
           name: main
           source-repository: ${{ needs.inputs.outputs.owner }}/.github
-          target-repository: ${{ needs.inputs.outputs.full-name }}
+          target-repository: ${{ needs.inputs.outputs.repository }}
           token: ${{ secrets.GH_PAT }}
 
   secrets:
@@ -203,7 +186,7 @@ jobs:
       - name: Create or Update Secrets
         run: |-
           function secret-set() {
-            gh secret --repo '${{ needs.inputs.outputs.full-name }}' set "$1" --body "$2"
+            gh secret --repo '${{ needs.inputs.outputs.repository }}' set "$1" --body "$2"
           }
           secret-set CARGO_REGISTRY_TOKEN '${{ secrets.CARGO_REGISTRY_TOKEN }}'
           secret-set DOCKERHUB_TOKEN '${{ secrets.DOCKERHUB_TOKEN }}'
@@ -223,7 +206,7 @@ jobs:
       - name: Create or Update Variables
         run: |-
           function variable-set() {
-            gh variable set --repo '${{ needs.inputs.outputs.full-name }}' "$1" --body "$2"
+            gh variable set --repo '${{ needs.inputs.outputs.repository }}' "$1" --body "$2"
           }
           variable-set DOCKERHUB_USERNAME '${{ vars.DOCKERHUB_USERNAME }}'
         env:

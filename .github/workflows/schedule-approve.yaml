@@ -6,41 +6,14 @@ on:
   workflow_call:
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: true
-
 jobs:
-  pre:
-    name: Pre
-    permissions:
-      actions: write
-    runs-on: ubuntu-latest
-    outputs:
-      should-skip: ${{ steps.pre.outputs.should-skip }}
-    steps:
-      - id: pre
-        name: Pre
-        uses: liblaf/actions-ts/pre@dist
-
   release-please:
     name: Release Please
     runs-on: ubuntu-latest
     steps:
       - name: Auto Approve Release Please
-        uses: liblaf/actions-ts/approve@dist
+        uses: liblaf/actions/approve@dist
         with:
           labels: "autorelease: pending"
-          repository: ${{ github.repository_owner }}
-          token: ${{ secrets.GH_PAT }}
-
-  renovate:
-    name: Renovate
-    runs-on: ubuntu-latest
-    steps:
-      - name: Auto Approve Renovate
-        uses: liblaf/actions-ts/approve@dist
-        with:
-          authors: renovate[bot]
           repository: ${{ github.repository_owner }}
           token: ${{ secrets.GH_PAT }}
