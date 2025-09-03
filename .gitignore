@@ -14,5 +14,7 @@ node_modules/
 # Nuxt.js build / generate output
 dist/
 
+# Cloudflare
 .dev.vars
+.wrangler/
 worker-configuration.d.ts
