@@ -1,15 +1,26 @@
 # Changelog
 
-## [0.0.4](https://github.com/liblaf/github-bot/compare/v0.0.3..v0.0.4) - 2025-08-24
+## [0.0.5](https://github.com/liblaf/github-bot/compare/v0.0.4..v0.0.5) - 2025-09-07
+
+### 🐛 Bug Fixes
+
+- **pull-request:** add concurrency configuration to prevent duplicate workflow runs - ([fb747b0](https://github.com/liblaf/github-bot/commit/fb747b0830833f9353b328d16e6bc3747e929868))
 
 ### 🔧 Continuous Integration
 
-- **release-please:** switch to community-maintained fork - ([487b761](https://github.com/liblaf/github-bot/commit/487b761ab5768f81f6dff58bc96dd054a3fedf47))
+- **workflows:** add PyPI environment creation and update job dependencies - ([8ff025c](https://github.com/liblaf/github-bot/commit/8ff025c5ea8d1c90b73fa1d59b3366dc6bb270cf))
 
 ### ❤️ New Contributors
 
 - [@liblaf-bot[bot]](https://github.com/apps/liblaf-bot) made their first contribution
 - [@liblaf](https://github.com/liblaf) made their first contribution
+- [@renovate[bot]](https://github.com/apps/renovate) made their first contribution in [#11](https://github.com/liblaf/github-bot/pull/11)
+
+## [0.0.4](https://github.com/liblaf/github-bot/compare/v0.0.3..v0.0.4) - 2025-08-24
+
+### 🔧 Continuous Integration
+
+- **release-please:** switch to community-maintained fork - ([487b761](https://github.com/liblaf/github-bot/commit/487b761ab5768f81f6dff58bc96dd054a3fedf47))
 
 ## [0.0.3](https://github.com/liblaf/github-bot/compare/v0.0.2..v0.0.3) - 2025-08-17
 
