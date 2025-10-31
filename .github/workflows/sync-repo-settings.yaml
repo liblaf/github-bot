@@ -52,6 +52,8 @@ jobs:
             --body '${{ vars.APP_ID }}' \
             --env 'MegaLinter' \
             --repo '${{ inputs.owner }}/${{ inputs.repo }}'
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_PAT }}
 
   label:
     name: Label
