@@ -1,0 +1,157 @@
+name: Bot > Release Please
+
+run-name: >-
+  ${{ github.workflow }} > ${{ inputs.owner }}/${{ inputs.repo }}@${{ inputs.ref }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      owner:
+        description: owner
+        required: false
+        default: liblaf
+        type: string
+      repo:
+        description: repo
+        required: true
+        type: string
+      ref:
+        description: ref
+        required: false
+        default: refs/heads/main
+        type: string
+
+concurrency:
+  group: >-
+    ${{ github.workflow }} > ${{ inputs.owner }}/${{ inputs.repo }}@${{ inputs.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    name: Release Please
+    runs-on: ubuntu-latest
+    environment:
+      name: Release Please
+    outputs:
+      created: ${{ steps.release-please.outputs.release_created }}
+      pr: ${{ steps.release-please.outputs.pr }}
+      tag: ${{ steps.release-please.outputs.tag_name }}
+    steps:
+      - id: auth
+        name: Auth
+        uses: liblaf/actions/auth@dist
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ inputs.owner }}
+          repositories: ${{ inputs.repo }}
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref }}
+          repository: ${{ inputs.owner }}/${{ inputs.repo }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - id: config
+        name: Find Config Files
+        run: |-
+          config='.config/release-please/config.json'
+          manifest='.config/release-please/.manifest.json'
+          if [[ -f "$config" ]]; then
+            printf 'config-file=%s\n' "$config" >> "$GITHUB_OUTPUT"
+          fi
+          if [[ -f "$manifest" ]]; then
+            printf 'manifest-file=%s\n' "$manifest" >> "$GITHUB_OUTPUT"
+          fi
+      - id: release-please
+        if: ${{ steps.config.outputs.config-file && steps.config.outputs.manifest-file }}
+        name: Release Please
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ steps.auth.outputs.token }}
+          config-file: ${{ steps.config.outputs.config-file }}
+          manifest-file: ${{ steps.config.outputs.manifest-file }}
+          repo-url: ${{ inputs.owner }}/${{ inputs.repo }}
+
+  changelog-pr:
+    name: Changelog (PR)
+    needs:
+      - release-please
+    if: ${{ needs.release-please.outputs.pr }}
+    runs-on: ubuntu-latest
+    environment:
+      name: Release Please
+    steps:
+      - id: auth
+        name: Authenticate
+        uses: liblaf/actions/auth@dist
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ inputs.owner }}
+          repositories: ${{ inputs.repo }}
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ inputs.owner }}/${{ inputs.repo }}
+          ref: ${{ fromJson(needs.release-please.outputs.pr).headBranchName }}
+          token: ${{ steps.auth.outputs.token }}
+          fetch-depth: 0
+      - id: tag
+        name: Get Tag
+        run: |-
+          title='${{ fromJson(needs.release-please.outputs.pr).title }}'
+          version="$(awk '{ print $NF }' <<< "$title")"
+          printf 'tag=%s\n' "v$version" >> "$GITHUB_OUTPUT"
+      - name: Changelog
+        uses: liblaf/actions/changelog@dist
+        with:
+          output: CHANGELOG.md
+          repository: ${{ inputs.owner }}/${{ inputs.repo }}
+          args: --tag '${{ steps.tag.outputs.tag }}'
+      - name: Commit
+        uses: liblaf/actions/commit@dist
+        with:
+          add-options: --verbose 'CHANGELOG.md'
+          message: "chore(docs): update CHANGELOG.md"
+          owner: ${{ inputs.owner }}
+          ref: ${{ fromJson(needs.release-please.outputs.pr).headBranchName }}
+          repository: ${{ inputs.repo }}
+          token: ${{ steps.auth.outputs.token }}
+
+  changelog-release:
+    name: Changelog (Release)
+    needs:
+      - release-please
+    if: ${{ needs.release-please.outputs.created }}
+    runs-on: ubuntu-latest
+    environment:
+      name: Release Please
+    steps:
+      - id: auth
+        name: Authenticate
+        uses: liblaf/actions/auth@dist
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ inputs.owner }}
+          repositories: ${{ inputs.repo }}
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ inputs.owner }}/${{ inputs.repo }}
+          ref: ${{ needs.release-please.outputs.tag }}
+          token: ${{ steps.auth.outputs.token }}
+          fetch-depth: 0
+      - id: changelog
+        name: Changelog
+        uses: liblaf/actions/changelog@dist
+        with:
+          repository: ${{ inputs.owner }}/${{ inputs.repo }}
+          args: --current --strip all
+      - name: Update Release
+        run: >-
+          gh release --repo '${{ inputs.owner }}/${{ inputs.repo }}'
+          edit '${{ needs.release-please.outputs.tag }}'
+          --notes-file '${{ steps.changelog.outputs.changelog }}'
+        env:
+          GH_TOKEN: ${{ steps.auth.outputs.token }}

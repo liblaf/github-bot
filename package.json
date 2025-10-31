@@ -61,6 +61,7 @@
     "@hono/zod-openapi": "^1",
     "@octokit/webhooks": "^14",
     "@scalar/hono-api-reference": "^0.9",
+    "chanfana": "^2",
     "hono": "^4",
     "octokit": "^5",
     "remeda": "^2",
@@ -70,18 +71,12 @@
   "devDependencies": {
     "@biomejs/biome": "^2",
     "@liblaf/config": "^0.1",
-    "bunup": "^0.15.0",
+    "@types/node": "^24",
+    "@types/service-worker-mock": "^2",
+    "bunup": "^0.15",
     "smee-client": "^4",
     "typescript": "^5",
     "wrangler": "^4"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "peerDependenciesMeta": {
-    "typescript": {
-      "optional": true
-    }
   },
   "publishConfig": {
     "access": "public",

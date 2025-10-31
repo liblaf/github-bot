@@ -15,6 +15,7 @@ ignoreRandomStrings: true
 useGitignore: true
 words:
   - bunup
+  - chanfana
   - direnv
   - dotenv
   - esac

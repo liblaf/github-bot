@@ -1,7 +1,7 @@
 {
   "extends": "@liblaf/config/tsconfig",
   "compilerOptions": {
-    "types": ["./worker-configuration.d.ts"]
+    "types": ["./worker-configuration.d.ts", "node"]
   },
   "exclude": ["bunup.config.ts", "dist/", "node_modules/"]
 }
