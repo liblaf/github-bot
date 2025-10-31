@@ -1,10 +1,10 @@
 import { createWebMiddleware } from "@octokit/webhooks";
 import { OpenAPIRoute } from "chanfana";
 import { env } from "hono/adapter";
-import type { App } from "octokit";
+import type { App, Octokit } from "octokit";
 import { GITHUB_OWNER, GITHUB_REPO } from "../../constants";
 import type { Context } from "../../utils";
-import { newGitHubApp } from "../../utils";
+import { newDispatchOctokit, newGitHubApp } from "../../utils";
 
 export class ReleasePlease extends OpenAPIRoute {
   override async handle(c: Context): Promise<Response> {
@@ -13,7 +13,8 @@ export class ReleasePlease extends OpenAPIRoute {
       privateKey: env(c).RELEASE_PLEASE_PRIVATE_KEY,
       webhooks: { secret: env(c).RELEASE_PLEASE_WEBHOOK_SECRET },
     });
-    app.webhooks.on("push", async ({ octokit, payload }) => {
+    app.webhooks.on("push", async ({ payload }) => {
+      const octokit: Octokit = newDispatchOctokit(c);
       await octokit.rest.actions.createWorkflowDispatch({
         owner: GITHUB_OWNER,
         repo: GITHUB_REPO,
