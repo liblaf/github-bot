@@ -23,6 +23,9 @@ on:
         required: true
         type: string
 
+env:
+  FORCE_COLOR: 1
+
 concurrency:
   group: >-
     ${{ github.workflow }} > ${{ inputs.owner }}/${{ inputs.repo }}@${{ inputs.ref }}
@@ -52,7 +55,6 @@ jobs:
           --field status='in_progress'
           --method PATCH
         env:
-          FORCE_COLOR: 1
           GH_TOKEN: ${{ steps.auth.outputs.token }}
 
   config:
@@ -233,11 +235,15 @@ jobs:
           repositories: ${{ inputs.repo }}
       - name: Update Check Run
         # ref: <https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run>
-        run: >-
-          gh api '/repos/${{ inputs.owner }}/${{ inputs.repo }}/check-runs/${{ inputs.check_run_id }}'
-          --field conclusion='${{ needs.release-please.result }}'
-          --field completed_at="$(date --iso-8601='seconds')"
-          --method PATCH
+        run: |-
+          conclusion='${{ needs.release-please.result }}'
+          if [[ '${{ needs.changelog-pr.result }}' == 'failure' ]] ||
+            [[ '${{ needs.release-please.result }}' == 'failure' ]]; then
+            conclusion='failure'
+          fi
+          gh api '/repos/${{ inputs.owner }}/${{ inputs.repo }}/check-runs/${{ inputs.check_run_id }}' \
+            --field conclusion="$conclusion" \
+            --field completed_at="$(date --iso-8601='seconds')" \
+            --method PATCH
         env:
-          FORCE_COLOR: 1
           GH_TOKEN: ${{ steps.auth.outputs.token }}
