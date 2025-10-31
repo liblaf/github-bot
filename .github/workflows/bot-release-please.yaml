@@ -130,7 +130,7 @@ jobs:
     name: Changelog (PR)
     needs:
       - release-please
-    if: ${{ needs.release-please.outputs.prs_created }}
+    if: ${{ needs.release-please.outputs.pr }}
     runs-on: ubuntu-latest
     environment:
       name: Release Please
