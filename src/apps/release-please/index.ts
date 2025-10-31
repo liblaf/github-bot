@@ -1,10 +1,13 @@
 import { createWebMiddleware } from "@octokit/webhooks";
 import { OpenAPIRoute } from "chanfana";
+import dayjs from "dayjs";
 import { env } from "hono/adapter";
 import type { App, Octokit } from "octokit";
 import { GITHUB_OWNER, GITHUB_REPO } from "../../constants";
 import type { Context } from "../../utils";
 import { newDispatchOctokit, newGitHubApp } from "../../utils";
+
+const WORKFLOW_ID = "bot-release-please.yaml";
 
 export class ReleasePlease extends OpenAPIRoute {
   override async handle(c: Context): Promise<Response> {
@@ -13,17 +16,32 @@ export class ReleasePlease extends OpenAPIRoute {
       privateKey: env(c).RELEASE_PLEASE_PRIVATE_KEY,
       webhooks: { secret: env(c).RELEASE_PLEASE_WEBHOOK_SECRET },
     });
-    app.webhooks.on("push", async ({ payload }) => {
-      const octokit: Octokit = newDispatchOctokit(c);
-      await octokit.rest.actions.createWorkflowDispatch({
+    app.webhooks.on("push", async ({ octokit, payload }) => {
+      const owner: string = payload.repository.owner!.login;
+      const repo: string = payload.repository.name;
+      // ref: <https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#create-a-check-run>
+      const checkRun = (
+        await octokit.rest.checks.create({
+          owner,
+          repo,
+          name: "Release Please",
+          head_sha: payload.after,
+          details_url: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/actions/workflows/${WORKFLOW_ID}`,
+          status: "queued",
+          started_at: dayjs().toISOString(),
+        })
+      ).data;
+      const dispatch: Octokit = newDispatchOctokit(c);
+      await dispatch.rest.actions.createWorkflowDispatch({
         owner: GITHUB_OWNER,
         repo: GITHUB_REPO,
-        workflow_id: "bot-release-please.yaml",
+        workflow_id: WORKFLOW_ID,
         ref: "main",
         inputs: {
-          owner: payload.repository.owner!.login,
+          check_run_id: checkRun.id.toString(),
+          owner,
           ref: payload.ref,
-          repo: payload.repository.name,
+          repo,
         },
       });
     });

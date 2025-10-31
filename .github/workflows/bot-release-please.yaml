@@ -6,10 +6,13 @@ run-name: >-
 on:
   workflow_dispatch:
     inputs:
+      check_run_id:
+        description: check_run_id
+        required: true
+        type: number
       owner:
         description: owner
-        required: false
-        default: liblaf
+        required: true
         type: string
       repo:
         description: repo
@@ -17,8 +20,7 @@ on:
         type: string
       ref:
         description: ref
-        required: false
-        default: refs/heads/main
+        required: true
         type: string
 
 concurrency:
@@ -27,14 +29,75 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  release-please:
-    name: Release Please
+  start:
+    name: Start
+    runs-on: ubuntu-latest
+    environment:
+      name: Release Please
+    steps:
+      - id: auth
+        name: Auth
+        uses: liblaf/actions/auth@dist
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ inputs.owner }}
+          repositories: ${{ inputs.repo }}
+      - name: Update Check Run
+        # ref: <https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run>
+        run: >-
+          gh api '/repos/${{ inputs.owner }}/${{ inputs.repo }}/check-runs/${{ inputs.check_run_id }}'
+          --field details_url='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          --field started_at="$(date --iso-8601='seconds')"
+          --field status='in_progress'
+
+  config:
+    name: Config
     runs-on: ubuntu-latest
     environment:
       name: Release Please
     outputs:
-      created: ${{ steps.release-please.outputs.release_created }}
+      config-file: ${{ steps.config.outputs.config-file }}
+      manifest-file: ${{ steps.config.outputs.manifest-file }}
+    steps:
+      - id: auth
+        name: Auth
+        uses: liblaf/actions/auth@dist
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ inputs.owner }}
+          repositories: ${{ inputs.repo }}
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ inputs.owner }}/${{ inputs.repo }}
+          ref: ${{ inputs.ref }}
+          token: ${{ steps.auth.outputs.token }}
+      - id: config
+        name: Find Config Files
+        run: |-
+          config='.config/release-please/config.json'
+          manifest='.config/release-please/.manifest.json'
+          if [[ -f $config ]]; then
+            printf 'config-file=%s\n' "$config" >> "$GITHUB_OUTPUT"
+          fi
+          if [[ -f $manifest ]]; then
+            printf 'manifest-file=%s\n' "$manifest" >> "$GITHUB_OUTPUT"
+          fi
+
+  release-please:
+    name: Release Please
+    needs:
+      - config
+    if: ${{ needs.config.outputs.config-file && needs.config.outputs.manifest-file }}
+    runs-on: ubuntu-latest
+    environment:
+      name: Release Please
+    outputs:
       pr: ${{ steps.release-please.outputs.pr }}
+      prs_created: ${{ steps.release-please.outputs.prs_created }}
+      release_created: ${{ steps.release-please.outputs.release_created }}
       tag: ${{ steps.release-please.outputs.tag_name }}
     steps:
       - id: auth
@@ -48,35 +111,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
         with:
-          ref: ${{ inputs.ref }}
           repository: ${{ inputs.owner }}/${{ inputs.repo }}
+          ref: ${{ inputs.ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
-      - id: config
-        name: Find Config Files
-        run: |-
-          config='.config/release-please/config.json'
-          manifest='.config/release-please/.manifest.json'
-          if [[ -f "$config" ]]; then
-            printf 'config-file=%s\n' "$config" >> "$GITHUB_OUTPUT"
-          fi
-          if [[ -f "$manifest" ]]; then
-            printf 'manifest-file=%s\n' "$manifest" >> "$GITHUB_OUTPUT"
-          fi
       - id: release-please
-        if: ${{ steps.config.outputs.config-file && steps.config.outputs.manifest-file }}
         name: Release Please
         uses: googleapis/release-please-action@v4
         with:
           token: ${{ steps.auth.outputs.token }}
-          config-file: ${{ steps.config.outputs.config-file }}
-          manifest-file: ${{ steps.config.outputs.manifest-file }}
+          config-file: ${{ needs.config.outputs.config-file }}
+          manifest-file: ${{ needs.config.outputs.manifest-file }}
           repo-url: ${{ inputs.owner }}/${{ inputs.repo }}
 
   changelog-pr:
     name: Changelog (PR)
     needs:
       - release-please
-    if: ${{ needs.release-please.outputs.pr }}
+    if: ${{ needs.release-please.outputs.prs_created }}
     runs-on: ubuntu-latest
     environment:
       name: Release Please
@@ -122,7 +173,7 @@ jobs:
     name: Changelog (Release)
     needs:
       - release-please
-    if: ${{ needs.release-please.outputs.created }}
+    if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
     environment:
       name: Release Please
@@ -155,3 +206,30 @@ jobs:
           --notes-file '${{ steps.changelog.outputs.changelog }}'
         env:
           GH_TOKEN: ${{ steps.auth.outputs.token }}
+
+  complete:
+    name: Complete
+    needs:
+      - start
+      - release-please
+      - changelog-pr
+      - changelog-release
+    if: always()
+    runs-on: ubuntu-latest
+    environment:
+      name: Release Please
+    steps:
+      - id: auth
+        name: Auth
+        uses: liblaf/actions/auth@dist
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ inputs.owner }}
+          repositories: ${{ inputs.repo }}
+      - name: Update Check Run
+        # ref: <https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run>
+        run: >-
+          gh api '/repos/${{ inputs.owner }}/${{ inputs.repo }}/check-runs/${{ inputs.check_run_id }}'
+          --field conclusion='${{ needs.release-please.result }}'
+          --field completed_at="$(date --iso-8601='seconds')"
