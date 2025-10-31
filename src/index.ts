@@ -22,7 +22,12 @@ const openapi = fromHono(app, {
   },
 });
 
+openapi.onError((err, c) => {
+  return c.json({ error: err, message: err.message }, 500);
+});
+
 openapi.get("/", Scalar({ url: "/openapi.json" }));
+
 openapi.post("/api/github/release-please/webhooks", ReleasePlease);
 
 export default app;

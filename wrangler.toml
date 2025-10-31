@@ -13,3 +13,6 @@ enabled = true
 
 [placement]
 mode = "smart"
+
+[vars]
+RELEASE_PLEASE_APP_ID = "2152310"
