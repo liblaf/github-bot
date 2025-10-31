@@ -50,6 +50,8 @@ jobs:
           --field details_url='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           --field started_at="$(date --iso-8601='seconds')"
           --field status='in_progress'
+        env:
+          GH_TOKEN: ${{ steps.auth.outputs.token }}
 
   config:
     name: Config
@@ -233,3 +235,5 @@ jobs:
           gh api '/repos/${{ inputs.owner }}/${{ inputs.repo }}/check-runs/${{ inputs.check_run_id }}'
           --field conclusion='${{ needs.release-please.result }}'
           --field completed_at="$(date --iso-8601='seconds')"
+        env:
+          GH_TOKEN: ${{ steps.auth.outputs.token }}
