@@ -34,6 +34,11 @@ jobs:
           private-key: ${{ secrets.PRIVATE_KEY }}
           owner: ${{ env.OWNER }}
           repositories: ${{ env.REPO }}
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ env.REPOSITORY }}
+          token: ${{ steps.auth.outputs.token }}
       - name: Copier Update
         run: |-
           copier=(pipx run --pip-args cookiecutter copier)
