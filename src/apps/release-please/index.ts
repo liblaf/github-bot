@@ -17,7 +17,7 @@ export class ReleasePlease extends OpenAPIRoute {
       webhooks: { secret: env(c).RELEASE_PLEASE_WEBHOOK_SECRET },
     });
     app.webhooks.on("push", async ({ octokit, payload }) => {
-      if (payload.repository.fork) return;
+      if (payload.repository.archived || payload.repository.fork) return;
       const ref: string = payload.ref;
       if (ref !== `refs/heads/${payload.repository.default_branch}`) return;
       const owner: string = payload.repository.owner!.login;

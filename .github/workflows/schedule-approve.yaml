@@ -16,4 +16,4 @@ jobs:
           bot: true
           labels: "autorelease: pending"
           repository: ${{ github.repository_owner }}
-          token: ${{ secrets.AUTO_APPROVE_PAT }}
+          token: ${{ secrets.GH_PAT }}

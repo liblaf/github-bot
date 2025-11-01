@@ -37,7 +37,7 @@ export class Bot extends OpenAPIRoute {
         "pull_request.synchronize",
       ],
       async ({ payload }) => {
-        if (payload.repository.fork) return;
+        if (payload.repository.archived || payload.repository.fork) return;
         const pat: Octokit = newUserOctokit(c);
         if (payload.pull_request.user?.type !== "Bot") return;
         if (

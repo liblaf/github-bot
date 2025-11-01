@@ -1,33 +1,24 @@
-name: (Schedule) Sync Repo Settings
+name: Schedule > Sync Repo Settings
 
 on:
   schedule:
     - cron: "0 0 * * 0" # Runs at 00:00, only on Sunday
-  workflow_call:
   workflow_dispatch:
 
 jobs:
-  settings:
-    name: Sync Repository Settings
+  sync-repo-settings:
+    name: Sync Repo Settings
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
-      - id: auth
-        name: Authenticate
-        uses: liblaf/actions/auth@dist
-        with:
-          app-id: ${{ secrets.GH_APP_ID }}
-          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
-          owner: ${{ github.repository_owner }}
-      - name: Sync Settings
-        run: |-
-          gh repo list '${{ github.repository_owner }}' --jq '.[].nameWithOwner' \
-            --json 'nameWithOwner' --limit 1000 --no-archived --source |
-            while read -r full_name; do
-              owner="${full_name%'/'*}"
-              repo="${full_name#*'/'}"
-              gh workflow --repo '${{ github.repository }}' run \
-                'on-repository.created.yaml' \
-                --field owner="$owner" --field repo="$repo"
-            done
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+      - name: Install Dependencies
+        run: bun install
+      - name: Sync Repo Settings
+        run: bun run 'scripts/schedule-settings.ts'
         env:
-          GH_TOKEN: ${{ steps.auth.outputs.token }}
+          GITHUB_TOKEN: ${{ github.token }}
