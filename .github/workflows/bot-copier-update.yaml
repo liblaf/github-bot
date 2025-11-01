@@ -1,0 +1,59 @@
+name: Bot > Copier Update
+
+run-name: >-
+  ${{ github.workflow }} > ${{ github.event.client_payload.repository }}
+
+on:
+  repository_dispatch:
+    types:
+      - schedule.weekly
+
+env:
+  OWNER: ${{ github.event.client_payload.owner }}
+  REPO: ${{ github.event.client_payload.repo }}
+  REPOSITORY: ${{ github.event.client_payload.repository }}
+  FORCE_COLOR: 1
+
+concurrency:
+  group: >-
+    ${{ github.workflow }} > ${{ github.event.client_payload.repository }}
+  cancel-in-progress: true
+
+jobs:
+  copier-update:
+    name: Copier Update
+    runs-on: ubuntu-latest
+    environment:
+      name: Copier Update
+    steps:
+      - id: auth
+        name: Auth
+        uses: liblaf/actions/auth@dist
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ env.OWNER }}
+          repositories: ${{ env.REPO }}
+      - name: Copier Update
+        run: |-
+          copier=(pipx run --pip-args cookiecutter copier)
+          if [[ -d '.config/copier/' ]]; then
+            find '.config/copier/' -iname '.copier-answers*' -type f -print0 |
+              while IFS= read -r -d '' answers_file; do
+                echo "::group::$answers_file"
+                "${copier[@]}" recopy --trust --answers-file "$answers_file" --force
+                echo '::endgroup::'
+              done
+          fi
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.auth.outputs.token }}
+          commit-message: "chore(copier): update from template"
+          branch: copier-update
+          sign-commits: true
+          title: "chore(copier): update from template"
+          body: Automated changes by [${{ github.workflow }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) Workflow
+          labels: autofix,automerge
+          assignees: ${{ env.OWNER }}
+          reviewers: ${{ env.OWNER }}

@@ -18,8 +18,8 @@ words:
   - chanfana
   - direnv
   - dotenv
-  - esac
   - liblaf
   - nuxt
+  - pipx
   - smee
   - tmpl

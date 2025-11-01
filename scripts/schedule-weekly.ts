@@ -18,7 +18,7 @@ async function main(): Promise<void> {
       octokit.rest.repos.createDispatchEvent({
         owner: actionOwner,
         repo: actionRepo,
-        event_type: "schedule.sync-repo-settings",
+        event_type: "schedule.weekly",
         client_payload: {
           owner: repo.owner.login,
           repo: repo.name,

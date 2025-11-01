@@ -1,4 +1,4 @@
-name: Schedule > Sync Repo Settings
+name: Schedule > Weekly
 
 on:
   schedule:
@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  sync-repo-settings:
-    name: Sync Repo Settings
+  schedule:
+    name: Schedule Weekly
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -18,7 +18,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
       - name: Install Dependencies
         run: bun install
-      - name: Sync Repo Settings
-        run: bun run 'scripts/schedule-settings.ts'
+      - name: Schedule Weekly
+        run: bun run 'scripts/schedule-weekly.ts'
         env:
           GITHUB_TOKEN: ${{ github.token }}

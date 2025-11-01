@@ -7,7 +7,7 @@ on:
   repository_dispatch:
     types:
       - bot.repository.created
-      - schedule.sync-repo-settings
+      - schedule.weekly
 
 env:
   OWNER: ${{ github.event.client_payload.owner }}
