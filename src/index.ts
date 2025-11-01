@@ -2,7 +2,7 @@ import { Scalar } from "@scalar/hono-api-reference";
 import { fromHono } from "chanfana";
 import { Hono } from "hono";
 import { description, version } from "../package.json";
-import { Misc, ReleasePlease } from "./apps";
+import { Bot, ReleasePlease } from "./apps";
 
 const app: Hono<{ Bindings: CloudflareBindings }> = new Hono<{
   Bindings: CloudflareBindings;
@@ -28,7 +28,7 @@ openapi.onError((err, c) => {
 
 openapi.get("/", Scalar({ url: "/openapi.json" }));
 
-openapi.post("/api/github/misc/webhooks", Misc);
+openapi.post("/api/github/webhooks", Bot);
 openapi.post("/api/github/release-please/webhooks", ReleasePlease);
 
 export default app;

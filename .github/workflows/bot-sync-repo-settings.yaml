@@ -6,7 +6,7 @@ run-name: >-
 on:
   repository_dispatch:
     types:
-      - bot.misc.repository.created
+      - bot.repository.created
 
 env:
   OWNER: ${{ github.event.client_payload.owner }}

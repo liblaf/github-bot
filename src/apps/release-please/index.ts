@@ -5,7 +5,7 @@ import { env } from "hono/adapter";
 import type { App, Octokit } from "octokit";
 import { GITHUB_OWNER, GITHUB_REPO } from "../../constants";
 import type { Context } from "../../utils";
-import { newDispatchOctokit, newGitHubApp } from "../../utils";
+import { newGitHubApp, newUserOctokit } from "../../utils";
 
 const WORKFLOW_ID = "bot-release-please.yaml";
 
@@ -34,8 +34,8 @@ export class ReleasePlease extends OpenAPIRoute {
           started_at: dayjs().toISOString(),
         })
       ).data;
-      const dispatch: Octokit = newDispatchOctokit(c);
-      await dispatch.rest.repos.createDispatchEvent({
+      const pat: Octokit = newUserOctokit(c);
+      await pat.rest.repos.createDispatchEvent({
         owner: GITHUB_OWNER,
         repo: GITHUB_REPO,
         event_type: "bot.release-please.push",

@@ -15,5 +15,5 @@ enabled = true
 mode = "smart"
 
 [vars]
-MISC_APP_ID = "2216435"
+BOT_APP_ID = "1022004"
 RELEASE_PLEASE_APP_ID = "2152310"

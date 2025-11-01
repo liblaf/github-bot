@@ -1,9 +1,8 @@
-name: (Schedule) Approve
+name: Schedule > Approve
 
 on:
   schedule:
     - cron: "0 0 * * 0" # Runs at 00:00, only on Sunday
-  workflow_call:
   workflow_dispatch:
 
 jobs:
@@ -14,6 +13,7 @@ jobs:
       - name: Auto Approve Release Please
         uses: liblaf/actions/approve@dist
         with:
+          bot: true
           labels: "autorelease: pending"
           repository: ${{ github.repository_owner }}
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.AUTO_APPROVE_PAT }}

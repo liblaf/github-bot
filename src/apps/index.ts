@@ -1,2 +1,2 @@
-export { Misc } from "./misc";
+export { Bot } from "./bot";
 export { ReleasePlease } from "./release-please";
