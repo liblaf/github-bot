@@ -78,7 +78,6 @@ jobs:
       - name: Edit Repository Settings
         run: >-
           gh repo edit '${{ env.REPOSITORY }}'
-          --allow-forking
           --allow-update-branch
           --delete-branch-on-merge
           --enable-auto-merge
