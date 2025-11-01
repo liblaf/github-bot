@@ -59,6 +59,8 @@ export class Bot extends OpenAPIRoute {
             return;
           }
         }
+        // wait for review requests
+        await new Promise((resolve) => setTimeout(resolve, 5000));
         await pat.rest.pulls.createReview({
           owner,
           repo,
