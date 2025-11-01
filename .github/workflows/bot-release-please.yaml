@@ -12,7 +12,7 @@ env:
   CHECK_RUN_ID: ${{ github.event.client_payload.check_run_id }}
   OWNER: ${{ github.event.client_payload.owner }}
   REF: ${{ github.event.client_payload.ref }}
-  REPO: ${{ github.event.client_payload.repository }}
+  REPO: ${{ github.event.client_payload.repo }}
   REPOSITORY: ${{ github.event.client_payload.repository }}
   FORCE_COLOR: 1
 
