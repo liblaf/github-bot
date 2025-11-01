@@ -1,34 +1,24 @@
 name: Bot > Release Please
 
 run-name: >-
-  ${{ github.workflow }} > ${{ inputs.owner }}/${{ inputs.repo }}@${{ inputs.ref }}
+  ${{ github.workflow }} > ${{ github.event.client_payload.repository }}@${{ github.event.client_payload.ref }}
 
 on:
-  workflow_dispatch:
-    inputs:
-      check_run_id:
-        description: check_run_id
-        required: true
-        type: number
-      owner:
-        description: owner
-        required: true
-        type: string
-      repo:
-        description: repo
-        required: true
-        type: string
-      ref:
-        description: ref
-        required: true
-        type: string
+  repository_dispatch:
+    types:
+      - bot.release-please.push
 
 env:
+  CHECK_RUN_ID: ${{ github.event.client_payload.check_run_id }}
+  OWNER: ${{ github.event.client_payload.owner }}
+  REF: ${{ github.event.client_payload.ref }}
+  REPO: ${{ github.event.client_payload.repository }}
+  REPOSITORY: ${{ github.event.client_payload.repository }}
   FORCE_COLOR: 1
 
 concurrency:
   group: >-
-    ${{ github.workflow }} > ${{ inputs.owner }}/${{ inputs.repo }}@${{ inputs.ref }}
+    ${{ github.workflow }} > ${{ github.event.client_payload.repository }}@${{ github.event.client_payload.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -44,12 +34,12 @@ jobs:
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
-          owner: ${{ inputs.owner }}
-          repositories: ${{ inputs.repo }}
+          owner: ${{ env.OWNER }}
+          repositories: ${{ env.REPO }}
       - name: Update Check Run
         # ref: <https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run>
         run: >-
-          gh api '/repos/${{ inputs.owner }}/${{ inputs.repo }}/check-runs/${{ inputs.check_run_id }}'
+          gh api '/repos/${{ env.REPOSITORY }}/check-runs/${{ env.CHECK_RUN_ID }}'
           --field details_url='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           --field started_at="$(date --iso-8601='seconds')"
           --field status='in_progress'
@@ -72,13 +62,13 @@ jobs:
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
-          owner: ${{ inputs.owner }}
-          repositories: ${{ inputs.repo }}
+          owner: ${{ env.OWNER }}
+          repositories: ${{ env.REPO }}
       - name: Checkout
         uses: actions/checkout@v5
         with:
-          repository: ${{ inputs.owner }}/${{ inputs.repo }}
-          ref: ${{ inputs.ref }}
+          repository: ${{ env.REPOSITORY }}
+          ref: ${{ env.REF }}
           token: ${{ steps.auth.outputs.token }}
       - id: config
         name: Find Config Files
@@ -112,13 +102,13 @@ jobs:
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
-          owner: ${{ inputs.owner }}
-          repositories: ${{ inputs.repo }}
+          owner: ${{ env.OWNER }}
+          repositories: ${{ env.REPO }}
       - name: Checkout
         uses: actions/checkout@v5
         with:
-          repository: ${{ inputs.owner }}/${{ inputs.repo }}
-          ref: ${{ inputs.ref }}
+          repository: ${{ env.REPOSITORY }}
+          ref: ${{ env.REF }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - id: release-please
         name: Release Please
@@ -127,7 +117,7 @@ jobs:
           token: ${{ steps.auth.outputs.token }}
           config-file: ${{ needs.config.outputs.config-file }}
           manifest-file: ${{ needs.config.outputs.manifest-file }}
-          repo-url: ${{ inputs.owner }}/${{ inputs.repo }}
+          repo-url: ${{ env.REPOSITORY }}
 
   changelog-pr:
     name: Changelog (PR)
@@ -144,12 +134,12 @@ jobs:
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
-          owner: ${{ inputs.owner }}
-          repositories: ${{ inputs.repo }}
+          owner: ${{ env.OWNER }}
+          repositories: ${{ env.REPO }}
       - name: Checkout
         uses: actions/checkout@v5
         with:
-          repository: ${{ inputs.owner }}/${{ inputs.repo }}
+          repository: ${{ env.REPOSITORY }}
           ref: ${{ fromJson(needs.release-please.outputs.pr).headBranchName }}
           token: ${{ steps.auth.outputs.token }}
           fetch-depth: 0
@@ -163,16 +153,16 @@ jobs:
         uses: liblaf/actions/changelog@dist
         with:
           output: CHANGELOG.md
-          repository: ${{ inputs.owner }}/${{ inputs.repo }}
+          repository: ${{ env.REPOSITORY }}
           args: --tag '${{ steps.tag.outputs.tag }}'
       - name: Commit
         uses: liblaf/actions/commit@dist
         with:
           add-options: --verbose 'CHANGELOG.md'
           message: "chore(docs): update CHANGELOG.md"
-          owner: ${{ inputs.owner }}
+          owner: ${{ env.OWNER }}
           ref: ${{ fromJson(needs.release-please.outputs.pr).headBranchName }}
-          repository: ${{ inputs.repo }}
+          repository: ${{ env.REPO }}
           token: ${{ steps.auth.outputs.token }}
 
   changelog-release:
@@ -190,12 +180,12 @@ jobs:
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
-          owner: ${{ inputs.owner }}
-          repositories: ${{ inputs.repo }}
+          owner: ${{ env.OWNER }}
+          repositories: ${{ env.REPO }}
       - name: Checkout
         uses: actions/checkout@v5
         with:
-          repository: ${{ inputs.owner }}/${{ inputs.repo }}
+          repository: ${{ env.REPOSITORY }}
           ref: ${{ needs.release-please.outputs.tag }}
           token: ${{ steps.auth.outputs.token }}
           fetch-depth: 0
@@ -203,11 +193,11 @@ jobs:
         name: Changelog
         uses: liblaf/actions/changelog@dist
         with:
-          repository: ${{ inputs.owner }}/${{ inputs.repo }}
+          repository: ${{ env.REPOSITORY }}
           args: --current --strip all
       - name: Update Release
         run: >-
-          gh release --repo '${{ inputs.owner }}/${{ inputs.repo }}'
+          gh release --repo '${{ env.REPOSITORY }}'
           edit '${{ needs.release-please.outputs.tag }}'
           --notes-file '${{ steps.changelog.outputs.changelog }}'
         env:
@@ -231,8 +221,8 @@ jobs:
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
-          owner: ${{ inputs.owner }}
-          repositories: ${{ inputs.repo }}
+          owner: ${{ env.OWNER }}
+          repositories: ${{ env.REPO }}
       - name: Update Check Run
         # ref: <https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run>
         run: |-
@@ -241,7 +231,7 @@ jobs:
             [[ '${{ needs.release-please.result }}' == 'failure' ]]; then
             conclusion='failure'
           fi
-          gh api '/repos/${{ inputs.owner }}/${{ inputs.repo }}/check-runs/${{ inputs.check_run_id }}' \
+          gh api '/repos/${{ env.REPOSITORY }}/check-runs/${{ env.CHECK_RUN_ID }}' \
             --field conclusion="$conclusion" \
             --field completed_at="$(date --iso-8601='seconds')" \
             --method PATCH

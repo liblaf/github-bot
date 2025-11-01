@@ -17,6 +17,7 @@ export class ReleasePlease extends OpenAPIRoute {
       webhooks: { secret: env(c).RELEASE_PLEASE_WEBHOOK_SECRET },
     });
     app.webhooks.on("push", async ({ octokit, payload }) => {
+      if (payload.repository.fork) return;
       const ref: string = payload.ref;
       if (ref !== `refs/heads/${payload.repository.default_branch}`) return;
       const owner: string = payload.repository.owner!.login;
@@ -34,16 +35,16 @@ export class ReleasePlease extends OpenAPIRoute {
         })
       ).data;
       const dispatch: Octokit = newDispatchOctokit(c);
-      await dispatch.rest.actions.createWorkflowDispatch({
+      await dispatch.rest.repos.createDispatchEvent({
         owner: GITHUB_OWNER,
         repo: GITHUB_REPO,
-        workflow_id: WORKFLOW_ID,
-        ref: "main",
-        inputs: {
-          check_run_id: checkRun.id.toString(),
+        event_type: "bot.release-please.push",
+        client_payload: {
+          check_run_id: checkRun.id,
           owner,
-          ref: payload.ref,
+          ref,
           repo,
+          repository: payload.repository.full_name,
         },
       });
     });
