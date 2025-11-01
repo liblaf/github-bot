@@ -16,7 +16,7 @@ export class Misc extends OpenAPIRoute {
     app.webhooks.on("repository.created", async ({ payload }) => {
       if (payload.repository.fork) return;
       const dispatch: Octokit = newDispatchOctokit(c);
-      dispatch.rest.repos.createDispatchEvent({
+      await dispatch.rest.repos.createDispatchEvent({
         owner: GITHUB_OWNER,
         repo: GITHUB_REPO,
         event_type: "bot.misc.repository.created",
