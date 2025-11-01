@@ -1,45 +1,47 @@
 # Changelog
 
-## [0.0.6](https://github.com/liblaf/github-bot/compare/v0.0.5...v0.0.6) (2025-11-01)
-
+## [0.0.6](https://github.com/liblaf/github-bot/compare/v0.0.5..v0.0.6) - 2025-11-01
 
 ### ✨ Features
 
-* **api:** Add global error handling for OpenAPI routes ([130ebd9](https://github.com/liblaf/github-bot/commit/130ebd9557302fcaf2c412b7ed6e606cf7895b0c))
-* **bot:** add automated repository setup and refine workflow dispatch ([3dd6607](https://github.com/liblaf/github-bot/commit/3dd6607ccc03078ef5b740f6988933f9b3c2a605))
-* **bot:** Introduce Bot app for repository management and auto-approval ([cfe4e74](https://github.com/liblaf/github-bot/commit/cfe4e74186c62c16841b57f6e5660090c99703cc))
-* **release-please:** Implement Release Please GitHub App and workflow orchestration ([2021a02](https://github.com/liblaf/github-bot/commit/2021a0277399b28b182604cb3acd259aae830f84))
-* **release-please:** integrate GitHub Check Runs for release process visibility ([84434e1](https://github.com/liblaf/github-bot/commit/84434e1b5491d2f9dd27fdaa61798e29111a53db))
-* **schedule:** introduce weekly automation schedule ([94b2690](https://github.com/liblaf/github-bot/commit/94b2690cd96e791594a5b66bdd6bc055e175b9df))
-
+- **api:** Add global error handling for OpenAPI routes - ([130ebd9](https://github.com/liblaf/github-bot/commit/130ebd9557302fcaf2c412b7ed6e606cf7895b0c))
+- **bot:** Introduce Bot app for repository management and auto-approval - ([cfe4e74](https://github.com/liblaf/github-bot/commit/cfe4e74186c62c16841b57f6e5660090c99703cc))
+- **bot:** add automated repository setup and refine workflow dispatch - ([3dd6607](https://github.com/liblaf/github-bot/commit/3dd6607ccc03078ef5b740f6988933f9b3c2a605))
+- **release-please:** integrate GitHub Check Runs for release process visibility - ([84434e1](https://github.com/liblaf/github-bot/commit/84434e1b5491d2f9dd27fdaa61798e29111a53db))
+- **release-please:** Implement Release Please GitHub App and workflow orchestration - ([2021a02](https://github.com/liblaf/github-bot/commit/2021a0277399b28b182604cb3acd259aae830f84))
+- **schedule:** introduce weekly automation schedule - ([94b2690](https://github.com/liblaf/github-bot/commit/94b2690cd96e791594a5b66bdd6bc055e175b9df))
 
 ### 🐛 Bug Fixes
 
-* **bot-release-please:** Provide GH_TOKEN for gh api calls ([8f481f8](https://github.com/liblaf/github-bot/commit/8f481f8b1638f7500eafdc2037025974eb3d5b84))
-* **bot:** Add delay before approving pull requests ([cb651c7](https://github.com/liblaf/github-bot/commit/cb651c7f276dafb5642650e92ddc5ce18ed0fbf2))
-* **ci:** Correct REPO environment variable in bot-release-please workflow ([22ccaa0](https://github.com/liblaf/github-bot/commit/22ccaa05ac930e1ea45deb6b400f980c77a05650))
-* **ci:** Correctly update GitHub check runs in bot-release-please workflow ([0a3c46b](https://github.com/liblaf/github-bot/commit/0a3c46b7efbbfb9c94bcfb249bd15eb899ebf3c8))
-* **ci:** Ensure GH_TOKEN is available for MegaLinter environment setup ([47d627f](https://github.com/liblaf/github-bot/commit/47d627f22d1694300048b2f3f6dc35d267cc2072))
-* **misc:** Await repository dispatch event creation ([2fa324d](https://github.com/liblaf/github-bot/commit/2fa324d3ef9e18e9397918cf9f9dc0539ab7d51f))
-* **misc:** Correct environment variable usage for Misc GitHub App ([ad6fea5](https://github.com/liblaf/github-bot/commit/ad6fea58edd493dcaf42e8b50a5fee0c823c5050))
-* **release-please:** Prevent workflow dispatch on non-default branches ([6094cde](https://github.com/liblaf/github-bot/commit/6094cdea19de17536247dbe3660564aed827f0df))
-* **repo-settings:** Remove explicit forking allowance ([ca409fc](https://github.com/liblaf/github-bot/commit/ca409fcd6f396f2f2a8f70e5a5e628d42738110e))
+- **bot:** Add delay before approving pull requests - ([cb651c7](https://github.com/liblaf/github-bot/commit/cb651c7f276dafb5642650e92ddc5ce18ed0fbf2))
+- **bot-release-please:** Provide GH_TOKEN for gh api calls - ([8f481f8](https://github.com/liblaf/github-bot/commit/8f481f8b1638f7500eafdc2037025974eb3d5b84))
+- **ci:** Correct REPO environment variable in bot-release-please workflow - ([22ccaa0](https://github.com/liblaf/github-bot/commit/22ccaa05ac930e1ea45deb6b400f980c77a05650))
+- **ci:** Ensure GH_TOKEN is available for MegaLinter environment setup - ([47d627f](https://github.com/liblaf/github-bot/commit/47d627f22d1694300048b2f3f6dc35d267cc2072))
+- **ci:** Correctly update GitHub check runs in bot-release-please workflow - ([0a3c46b](https://github.com/liblaf/github-bot/commit/0a3c46b7efbbfb9c94bcfb249bd15eb899ebf3c8))
+- **misc:** Await repository dispatch event creation - ([2fa324d](https://github.com/liblaf/github-bot/commit/2fa324d3ef9e18e9397918cf9f9dc0539ab7d51f))
+- **misc:** Correct environment variable usage for Misc GitHub App - ([ad6fea5](https://github.com/liblaf/github-bot/commit/ad6fea58edd493dcaf42e8b50a5fee0c823c5050))
+- **release-please:** Prevent workflow dispatch on non-default branches - ([6094cde](https://github.com/liblaf/github-bot/commit/6094cdea19de17536247dbe3660564aed827f0df))
+- **repo-settings:** Remove explicit forking allowance - ([ca409fc](https://github.com/liblaf/github-bot/commit/ca409fcd6f396f2f2a8f70e5a5e628d42738110e))
 
+### ♻ Code Refactoring
 
-### ♻️ Code Refactoring
+- **dispatch:** Extract dispatch Octokit creation to utility - ([e96fc36](https://github.com/liblaf/github-bot/commit/e96fc36b74cd7f3d7a76947a2d95d07c6aa10377))
+- **github-bot:** Improve repository settings sync and token usage - ([b019f30](https://github.com/liblaf/github-bot/commit/b019f305f011188674401438008aab1d4a22d96f))
 
-* **dispatch:** Extract dispatch Octokit creation to utility ([e96fc36](https://github.com/liblaf/github-bot/commit/e96fc36b74cd7f3d7a76947a2d95d07c6aa10377))
-* **github-bot:** Improve repository settings sync and token usage ([b019f30](https://github.com/liblaf/github-bot/commit/b019f305f011188674401438008aab1d4a22d96f))
+### 🔧 Continuous Integration
 
+- **bot-copier-update:** Add checkout step for copier update - ([83adf73](https://github.com/liblaf/github-bot/commit/83adf73f6960325430c5e88f65657c47e3432e5c))
+- **bot-release-please:** Consolidate `FORCE_COLOR` and improve check run conclusion logic - ([a4f64ee](https://github.com/liblaf/github-bot/commit/a4f64eee092e28b151f3a4aa0cace759ab9eb857))
+- **release-please:** Fix condition for changelog PR job - ([ad9cdf9](https://github.com/liblaf/github-bot/commit/ad9cdf9a87f5afa1fc966e258fef0768773cc944))
+- **repo-settings:** Add workflow to synchronize repository settings - ([9bd2627](https://github.com/liblaf/github-bot/commit/9bd2627449bc74910f6c854eb062b0a54cd1bf27))
+- **sync-repo-settings:** configure repository settings - ([541d810](https://github.com/liblaf/github-bot/commit/541d81044de9a570f5f1d513a39ee68d7707d537))
+- force color output for gh api commands - ([b641533](https://github.com/liblaf/github-bot/commit/b6415338f965e9cada528f55ce40645a89df1555))
 
-### ⚙️ Continuous Integration
+### ❤️ New Contributors
 
-* **bot-copier-update:** Add checkout step for copier update ([83adf73](https://github.com/liblaf/github-bot/commit/83adf73f6960325430c5e88f65657c47e3432e5c))
-* **bot-release-please:** Consolidate `FORCE_COLOR` and improve check run conclusion logic ([a4f64ee](https://github.com/liblaf/github-bot/commit/a4f64eee092e28b151f3a4aa0cace759ab9eb857))
-* force color output for gh api commands ([b641533](https://github.com/liblaf/github-bot/commit/b6415338f965e9cada528f55ce40645a89df1555))
-* **release-please:** Fix condition for changelog PR job ([ad9cdf9](https://github.com/liblaf/github-bot/commit/ad9cdf9a87f5afa1fc966e258fef0768773cc944))
-* **repo-settings:** Add workflow to synchronize repository settings ([9bd2627](https://github.com/liblaf/github-bot/commit/9bd2627449bc74910f6c854eb062b0a54cd1bf27))
-* **sync-repo-settings:** configure repository settings ([541d810](https://github.com/liblaf/github-bot/commit/541d81044de9a570f5f1d513a39ee68d7707d537))
+- [@liblaf](https://github.com/liblaf) made their first contribution
+- [@renovate[bot]](https://github.com/apps/renovate) made their first contribution in [#18](https://github.com/liblaf/github-bot/pull/18)
+- [@liblaf[bot]](https://github.com/apps/liblaf) made their first contribution
 
 ## [0.0.5](https://github.com/liblaf/github-bot/compare/v0.0.4..v0.0.5) - 2025-09-07
 
@@ -50,12 +52,6 @@
 ### 🔧 Continuous Integration
 
 - **workflows:** add PyPI environment creation and update job dependencies - ([8ff025c](https://github.com/liblaf/github-bot/commit/8ff025c5ea8d1c90b73fa1d59b3366dc6bb270cf))
-
-### ❤️ New Contributors
-
-- [@liblaf-bot[bot]](https://github.com/apps/liblaf-bot) made their first contribution
-- [@liblaf](https://github.com/liblaf) made their first contribution
-- [@renovate[bot]](https://github.com/apps/renovate) made their first contribution in [#11](https://github.com/liblaf/github-bot/pull/11)
 
 ## [0.0.4](https://github.com/liblaf/github-bot/compare/v0.0.3..v0.0.4) - 2025-08-24
 
@@ -147,5 +143,5 @@
 
 ### ❤️ New Contributors
 
-- [@liblaf-bot[bot]](https://github.com/apps/liblaf-bot) made their first contribution in [#1](https://github.com/liblaf/github-bot/pull/1)
+- [@liblaf[bot]](https://github.com/apps/liblaf) made their first contribution in [#1](https://github.com/liblaf/github-bot/pull/1)
 - [@liblaf](https://github.com/liblaf) made their first contribution
