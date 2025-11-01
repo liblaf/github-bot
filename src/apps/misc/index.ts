@@ -9,9 +9,9 @@ import { newDispatchOctokit, newGitHubApp } from "../../utils";
 export class Misc extends OpenAPIRoute {
   override async handle(c: Context): Promise<Response> {
     const app: App = newGitHubApp({
-      appId: env(c).RELEASE_PLEASE_APP_ID,
-      privateKey: env(c).RELEASE_PLEASE_PRIVATE_KEY,
-      webhooks: { secret: env(c).RELEASE_PLEASE_WEBHOOK_SECRET },
+      appId: env(c).MISC_APP_ID,
+      privateKey: env(c).MISC_PRIVATE_KEY,
+      webhooks: { secret: env(c).MISC_WEBHOOK_SECRET },
     });
     app.webhooks.on("repository.created", async ({ payload }) => {
       if (payload.repository.fork) return;
