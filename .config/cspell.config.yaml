@@ -14,12 +14,14 @@ ignorePaths:
 ignoreRandomStrings: true
 useGitignore: true
 words:
+  - adel
   - bunup
   - chanfana
-  - direnv
   - dotenv
+  - flaskenv
   - liblaf
   - llms
+  - muhandes
   - nuxt
   - pipx
   - smee

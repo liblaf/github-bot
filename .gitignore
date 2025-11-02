@@ -19,3 +19,9 @@ dist/
 .env
 .wrangler/
 worker-configuration.d.ts
+
+# Dotenv
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
