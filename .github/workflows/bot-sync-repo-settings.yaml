@@ -52,6 +52,60 @@ jobs:
           --allow-added-labels
           '${{ env.REPOSITORY }}'
 
+  env-mega-linter:
+    name: Environment > Mega Linter
+    environment:
+      name: MegaLinter
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: MegaLinter
+    steps:
+      - name: Create Environment
+        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2022-11-28#create-or-update-an-environment>
+        run: >-
+          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT }}'
+          --method PUT
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+      - name: Set Secrets & Variables
+        run: |-
+          gh secret set PRIVATE_KEY \
+            --env '${{ env.ENVIRONMENT }}' \
+            --body '${{ secrets.PRIVATE_KEY }}' \
+            --repo '${{ env.REPOSITORY }}'
+          gh variable set APP_ID --env '${{ env.ENVIRONMENT }}' \
+            --body '${{ vars.APP_ID }}' \
+            --repo '${{ env.REPOSITORY }}'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+
+  env-release-please:
+    name: Environment > Release Please
+    environment:
+      name: Release Please
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: Release Please
+    steps:
+      - name: Create Environment
+        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2022-11-28#create-or-update-an-environment>
+        run: >-
+          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT }}'
+          --method PUT
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+      - name: Set Secrets & Variables
+        run: |-
+          gh secret set PRIVATE_KEY \
+            --env '${{ env.ENVIRONMENT }}' \
+            --body '${{ secrets.PRIVATE_KEY }}' \
+            --repo '${{ env.REPOSITORY }}'
+          gh variable set APP_ID --env '${{ env.ENVIRONMENT }}' \
+            --body '${{ vars.APP_ID }}' \
+            --repo '${{ env.REPOSITORY }}'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+
   repo:
     name: Repo
     runs-on: ubuntu-latest
