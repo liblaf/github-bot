@@ -1,4 +1,6 @@
 #:schema https://mise.jdx.dev/schema/mise.json
 
-[hooks.enter]
-script = "mise run gen-dev-vars"
+[env]
+GITHUB_REPOSITORY = "liblaf/github-bot"
+GITHUB_REPOSITORY_OWNER = "liblaf"
+GITHUB_TOKEN = '{{ exec(command="gh auth token") }}'

@@ -17,18 +17,16 @@ env:
 concurrency:
   group: >-
     ${{ github.workflow }} > ${{ github.event.client_payload.repository }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   copier-update:
     name: Copier Update
     runs-on: ubuntu-latest
-    environment:
-      name: Copier Update
     steps:
       - id: auth
         name: Auth
-        uses: liblaf/actions/auth@dist
+        uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}

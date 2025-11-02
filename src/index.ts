@@ -1,34 +1,6 @@
-import { Scalar } from "@scalar/hono-api-reference";
-import { fromHono } from "chanfana";
-import { Hono } from "hono";
-import { description, version } from "../package.json";
-import { Bot, ReleasePlease } from "./apps";
+import type { Hono } from "hono";
+import { newHonoApp } from "./routes";
 
-const app: Hono<{ Bindings: CloudflareBindings }> = new Hono<{
-  Bindings: CloudflareBindings;
-}>();
-
-const openapi = fromHono(app, {
-  schema: {
-    info: {
-      description,
-      title: "GitHub Bot",
-      version,
-    },
-    externalDocs: {
-      description: "GitHub",
-      url: "https://github.com/liblaf/github-bot",
-    },
-  },
-});
-
-openapi.onError((err, c) => {
-  return c.json({ error: err, message: err.message }, 500);
-});
-
-openapi.get("/", Scalar({ url: "/openapi.json" }));
-
-openapi.post("/api/github/webhooks", Bot);
-openapi.post("/api/github/release-please/webhooks", ReleasePlease);
+const app: Hono<{ Bindings: CloudflareBindings }> = newHonoApp();
 
 export default app;

@@ -19,7 +19,7 @@ words:
   - direnv
   - dotenv
   - liblaf
+  - llms
   - nuxt
   - pipx
   - smee
-  - tmpl

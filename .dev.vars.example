@@ -1,0 +1,5 @@
+# -*- mode: dotenv; -*-
+
+GH_PAT='***'
+PRIVATE_KEY='***'
+WEBHOOK_SECRET='***'

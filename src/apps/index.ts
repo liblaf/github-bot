@@ -1,2 +1,4 @@
-export { Bot } from "./bot";
-export { ReleasePlease } from "./release-please";
+export { onAutoApprove } from "./auto-approve";
+export { newGitHubApp } from "./main";
+export { onReleasePlease } from "./release-please";
+export { onSyncRepoSettings } from "./sync-repo-settings";

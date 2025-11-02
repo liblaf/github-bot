@@ -6,14 +6,19 @@ run-name: >-
 on:
   repository_dispatch:
     types:
-      - bot.repository.created
       - schedule.weekly
+      - sync-repo-settings
 
 env:
   OWNER: ${{ github.event.client_payload.owner }}
   REPO: ${{ github.event.client_payload.repo }}
   REPOSITORY: ${{ github.event.client_payload.repository }}
   FORCE_COLOR: 1
+
+concurrency:
+  group: >-
+    ${{ github.workflow }} > ${{ github.event.client_payload.repository }}
+  cancel-in-progress: false
 
 jobs:
   actions:
