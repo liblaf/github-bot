@@ -59,6 +59,6 @@ jobs:
           sign-commits: true
           title: "chore(copier): update from template"
           body: Automated changes by [${{ github.workflow }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) Workflow
-          labels: autofix,automerge
+          labels: automerge,bot
           assignees: ${{ env.OWNER }}
           reviewers: ${{ env.OWNER }}
