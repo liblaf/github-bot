@@ -23,6 +23,8 @@ jobs:
   copier-update:
     name: Copier Update
     runs-on: ubuntu-latest
+    environment:
+      name: Copier Update
     steps:
       - id: auth
         name: Auth
