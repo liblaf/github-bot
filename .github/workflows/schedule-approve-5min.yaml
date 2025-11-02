@@ -1,4 +1,4 @@
-name: Schedule Approve
+name: Schedule > Approve > 5 Minutes
 
 on:
   schedule:

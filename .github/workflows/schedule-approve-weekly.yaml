@@ -1,4 +1,4 @@
-name: Schedule Approve Weekly
+name: Schedule > Approve > Weekly
 
 on:
   schedule:
