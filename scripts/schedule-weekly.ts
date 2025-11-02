@@ -15,6 +15,7 @@ async function main(): Promise<void> {
   )) {
     for (const repo of repos) {
       if (repo.fork || repo.archived) continue;
+      console.info(repo.full_name);
       octokit.rest.repos.createDispatchEvent({
         owner: actionOwner,
         repo: actionRepo,
