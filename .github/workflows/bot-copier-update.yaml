@@ -6,6 +6,7 @@ run-name: >-
 on:
   repository_dispatch:
     types:
+      - copier-update
       - schedule.weekly
 
 env:
