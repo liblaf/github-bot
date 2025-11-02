@@ -16,6 +16,10 @@ export function newHonoApp(): Hono<{ Bindings: CloudflareBindings }> {
       },
     },
   });
+  openapi.onError(async (err, c) => {
+    console.error(err);
+    return c.text(`${err}`, 500);
+  });
   openapi.get("/", Scalar({ url: "/openapi.json" }));
   openapi.post("/api/github/webhooks", Webhooks);
   registerLLMRoutes(app, openapi);
