@@ -3,8 +3,6 @@ import { env } from "hono/adapter";
 import { App } from "octokit";
 import type { Context } from "../types";
 import { onAutoApprove } from "./auto-approve";
-import { onMegaLinter } from "./mega-linter";
-import { onReleasePlease } from "./release-please";
 import { onSyncRepoSettings } from "./sync-repo-settings";
 
 export function newGitHubApp(c: Context): App {
@@ -24,8 +22,8 @@ export function newGitHubApp(c: Context): App {
     console.error(err);
   });
   onAutoApprove(c, app);
-  onMegaLinter(c, app);
-  onReleasePlease(c, app);
+  // onMegaLinter(c, app);
+  // onReleasePlease(c, app);
   onSyncRepoSettings(c, app);
   return app;
 }
