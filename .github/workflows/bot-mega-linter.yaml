@@ -1,5 +1,8 @@
 name: Bot > MegaLinter
 
+run-name: >-
+  ${{ github.workflow }} > ${{ github.event.client_payload.repository }}@${{ github.event.client_payload.ref }}
+
 on:
   repository_dispatch:
     types:
