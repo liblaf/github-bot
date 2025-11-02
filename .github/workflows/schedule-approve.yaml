@@ -11,10 +11,10 @@ concurrency:
 
 jobs:
   bot:
-    name: Copier Update
+    name: Bot
     runs-on: ubuntu-latest
     steps:
-      - name: Auto Approve Copier Update
+      - name: Auto Approve Bot
         uses: liblaf/actions/approve@dist
         with:
           approve-token: ${{ secrets.GH_PAT }}
