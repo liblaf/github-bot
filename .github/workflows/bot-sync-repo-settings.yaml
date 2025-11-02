@@ -49,6 +49,7 @@ jobs:
           npx github-label-sync
           --access-token '${{ secrets.GH_PAT }}'
           --labels 'labels.yaml'
+          --allow-added-labels
           '${{ env.REPOSITORY }}'
 
   env-mega-linter:
