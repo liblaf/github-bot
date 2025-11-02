@@ -35,31 +35,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
 
-  env-mega-linter:
-    name: Environment > MegaLinter
-    environment:
-      name: MegaLinter
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create Environment
-        run: >-
-          gh api '/repos/${{ env.REPOSITORY }}/environments/MegaLinter'
-          --method PUT
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-      - name: Set Secrets and Variables
-        run: |-
-          gh secret set PRIVATE_KEY \
-            --body '${{ secrets.PRIVATE_KEY }}' \
-            --env 'MegaLinter' \
-            --repo '${{ env.REPOSITORY }}'
-          gh variable set APP_ID \
-            --body '${{ vars.APP_ID }}' \
-            --env 'MegaLinter' \
-            --repo '${{ env.REPOSITORY }}'
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-
   label:
     name: Label
     runs-on: ubuntu-latest

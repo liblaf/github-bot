@@ -82,8 +82,6 @@ jobs:
       - config
     if: ${{ needs.config.outputs.config-file && needs.config.outputs.manifest-file }}
     runs-on: ubuntu-latest
-    environment:
-      name: Release Please
     outputs:
       pr: ${{ steps.release-please.outputs.pr }}
       prs_created: ${{ steps.release-please.outputs.prs_created }}
@@ -112,8 +110,6 @@ jobs:
       - release-please
     if: ${{ needs.release-please.outputs.pr }}
     runs-on: ubuntu-latest
-    environment:
-      name: Release Please
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -151,8 +147,6 @@ jobs:
       - release-please
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
-    environment:
-      name: Release Please
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -184,8 +178,6 @@ jobs:
       - changelog-release
     if: always()
     runs-on: ubuntu-latest
-    environment:
-      name: Release Please
     steps:
       - name: Update Check Run
         # ref: <https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run>

@@ -2,7 +2,7 @@ import type { App, Octokit } from "octokit";
 import type { Context } from "../types";
 import { newAdminOctokit } from "../utils";
 
-export function onAutoApprove(c: Context, app: App): App {
+export function onAutoApprove(c: Context, app: App): void {
   app.webhooks.on(
     [
       "pull_request_review.dismissed",
@@ -41,7 +41,6 @@ export function onAutoApprove(c: Context, app: App): App {
       });
     },
   );
-  return app;
 }
 
 function contains(arr: { name: string }[], val: string): boolean {

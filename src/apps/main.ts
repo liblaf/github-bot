@@ -2,6 +2,10 @@ import crypto from "node:crypto";
 import { env } from "hono/adapter";
 import { App } from "octokit";
 import type { Context } from "../types";
+import { onAutoApprove } from "./auto-approve";
+import { onMegaLinter } from "./mega-linter";
+import { onReleasePlease } from "./release-please";
+import { onSyncRepoSettings } from "./sync-repo-settings";
 
 export function newGitHubApp(c: Context): App {
   const appId: string = env(c).APP_ID;
@@ -19,5 +23,9 @@ export function newGitHubApp(c: Context): App {
   app.webhooks.onError((err) => {
     console.error(err);
   });
+  onAutoApprove(c, app);
+  onMegaLinter(c, app);
+  onReleasePlease(c, app);
+  onSyncRepoSettings(c, app);
   return app;
 }
