@@ -22,8 +22,6 @@ jobs:
   start:
     name: Start
     runs-on: ubuntu-latest
-    outputs:
-      token: ${{ steps.auth.outputs.token }}
     steps:
       - id: auth
         name: Auth
@@ -33,7 +31,6 @@ jobs:
           private-key: ${{ secrets.PRIVATE_KEY }}
           owner: ${{ env.OWNER }}
           repositories: ${{ env.REPO }}
-          skip-token-revoke: true
       - name: Update Check Run
         # ref: <https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run>
         run: >-
@@ -52,6 +49,14 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
+      - id: auth
+        name: Auth
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ env.OWNER }}
+          repositories: ${{ env.REPO }}
       - name: Update Check Run
         # ref: <https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run>
         run: |-
@@ -60,4 +65,4 @@ jobs:
             --field completed_at="$(date --iso-8601='seconds')" \
             --method PATCH
         env:
-          GH_TOKEN: ${{ needs.start.outputs.token }}
+          GH_TOKEN: ${{ steps.auth.outputs.token }}

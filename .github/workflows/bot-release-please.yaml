@@ -25,8 +25,6 @@ jobs:
   start:
     name: Start
     runs-on: ubuntu-latest
-    outputs:
-      token: ${{ steps.auth.outputs.token }}
     steps:
       - id: auth
         name: Auth
@@ -36,7 +34,6 @@ jobs:
           private-key: ${{ secrets.PRIVATE_KEY }}
           owner: ${{ env.OWNER }}
           repositories: ${{ env.REPO }}
-          skip-token-revoke: true
       - name: Update Check Run
         # ref: <https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run>
         run: >-
@@ -57,12 +54,20 @@ jobs:
       config-file: ${{ steps.config.outputs.config-file }}
       manifest-file: ${{ steps.config.outputs.manifest-file }}
     steps:
+      - id: auth
+        name: Auth
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ env.OWNER }}
+          repositories: ${{ env.REPO }}
       - name: Checkout
         uses: actions/checkout@v5
         with:
           repository: ${{ env.REPOSITORY }}
           ref: ${{ env.REF }}
-          token: ${{ needs.start.outputs.token }}
+          token: ${{ steps.auth.outputs.token }}
       - id: config
         name: Find Config Files
         run: |-
@@ -88,17 +93,25 @@ jobs:
       release_created: ${{ steps.release-please.outputs.release_created }}
       tag: ${{ steps.release-please.outputs.tag_name }}
     steps:
+      - id: auth
+        name: Auth
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ env.OWNER }}
+          repositories: ${{ env.REPO }}
       - name: Checkout
         uses: actions/checkout@v5
         with:
           repository: ${{ env.REPOSITORY }}
           ref: ${{ env.REF }}
-          token: ${{ needs.start.outputs.token }}
+          token: ${{ steps.auth.outputs.token }}
       - id: release-please
         name: Release Please
         uses: googleapis/release-please-action@v4
         with:
-          token: ${{ needs.start.outputs.token }}
+          token: ${{ steps.auth.outputs.token }}
           config-file: ${{ needs.config.outputs.config-file }}
           manifest-file: ${{ needs.config.outputs.manifest-file }}
           repo-url: ${{ env.REPOSITORY }}
@@ -111,12 +124,20 @@ jobs:
     if: ${{ needs.release-please.outputs.pr }}
     runs-on: ubuntu-latest
     steps:
+      - id: auth
+        name: Auth
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ env.OWNER }}
+          repositories: ${{ env.REPO }}
       - name: Checkout
         uses: actions/checkout@v5
         with:
           repository: ${{ env.REPOSITORY }}
           ref: ${{ fromJson(needs.release-please.outputs.pr).headBranchName }}
-          token: ${{ needs.start.outputs.token }}
+          token: ${{ steps.auth.outputs.token }}
           fetch-depth: 0
       - id: tag
         name: Get Tag
@@ -138,7 +159,7 @@ jobs:
           owner: ${{ env.OWNER }}
           ref: ${{ fromJson(needs.release-please.outputs.pr).headBranchName }}
           repository: ${{ env.REPO }}
-          token: ${{ needs.start.outputs.token }}
+          token: ${{ steps.auth.outputs.token }}
 
   changelog-release:
     name: Changelog (Release)
@@ -148,12 +169,20 @@ jobs:
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
     steps:
+      - id: auth
+        name: Auth
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ env.OWNER }}
+          repositories: ${{ env.REPO }}
       - name: Checkout
         uses: actions/checkout@v5
         with:
           repository: ${{ env.REPOSITORY }}
           ref: ${{ needs.release-please.outputs.tag }}
-          token: ${{ needs.start.outputs.token }}
+          token: ${{ steps.auth.outputs.token }}
           fetch-depth: 0
       - id: changelog
         name: Changelog
@@ -167,7 +196,7 @@ jobs:
           --notes-file '${{ steps.changelog.outputs.changelog }}'
           --repo '${{ env.REPOSITORY }}'
         env:
-          GH_TOKEN: ${{ needs.start.outputs.token }}
+          GH_TOKEN: ${{ steps.auth.outputs.token }}
 
   complete:
     name: Complete
@@ -179,6 +208,14 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
+      - id: auth
+        name: Auth
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ env.OWNER }}
+          repositories: ${{ env.REPO }}
       - name: Update Check Run
         # ref: <https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run>
         run: |-
@@ -192,4 +229,4 @@ jobs:
             --field completed_at="$(date --iso-8601='seconds')" \
             --method PATCH
         env:
-          GH_TOKEN: ${{ needs.start.outputs.token }}
+          GH_TOKEN: ${{ steps.auth.outputs.token }}
