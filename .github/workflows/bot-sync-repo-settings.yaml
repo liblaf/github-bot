@@ -134,7 +134,7 @@ jobs:
     steps:
       - name: Ruleset Import
         # TODO: switch to gh cli until <https://github.com/cli/cli/issues/8019> is resolved
-        uses: liblaf/actions/ruleset-import@dist
+        uses: liblaf/actions/ruleset-import@v1
         with:
           name: main
           source-repository: ${{ env.OWNER }}/.github

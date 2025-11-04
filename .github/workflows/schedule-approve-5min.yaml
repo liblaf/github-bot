@@ -15,9 +15,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Auto Approve Bot
-        uses: liblaf/actions/approve@dist
+        uses: liblaf/actions/approve@v1
         with:
           approve-token: ${{ secrets.GH_PAT }}
           bot: true
           labels: bot
+          repository: ${{ github.repository_owner }}
+
+  pre-commit-ci:
+    name: Bot
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto Approve pre-commit-ci[bot]
+        uses: liblaf/actions/approve@v1
+        with:
+          approve-token: ${{ secrets.GH_PAT }}
+          authors: pre-commit-ci[bot]
+          bot: true
           repository: ${{ github.repository_owner }}

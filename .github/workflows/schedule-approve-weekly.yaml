@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Auto Approve Release Please
-        uses: liblaf/actions/approve@dist
+        uses: liblaf/actions/approve@v1
         with:
           approve-token: ${{ secrets.GH_PAT }}
           bot: true
