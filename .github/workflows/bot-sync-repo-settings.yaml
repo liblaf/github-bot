@@ -106,6 +106,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
 
+  gh-pages:
+    name: GitHub Pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup GitHub Pages
+        uses: liblaf/actions/setup-pages@v1
+        with:
+          repository: ${{ env.REPOSITORY }}
+          token: ${{ secrets.GH_PAT }}
+
   repo:
     name: Repo
     runs-on: ubuntu-latest
