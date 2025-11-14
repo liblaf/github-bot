@@ -76,7 +76,7 @@
     "@types/node": "^24",
     "@types/service-worker-mock": "^2",
     "bunup": "^0.15",
-    "smee-client": "^4",
+    "smee-client": "^5.0.0",
     "typescript": "^5",
     "wrangler": "^4"
   },
