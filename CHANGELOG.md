@@ -7,11 +7,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Changelog](https://github.com/conventional-changelog/conventional-changelog-config-spec/blob/master/versions/2.2.0/README.md),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.2](https://github.com/liblaf/github-bot/releases/tag/v0.1.2) - 2025-11-04
+## [0.1.3](https://github.com/liblaf/github-bot/releases/tag/v0.1.3) - 2025-11-14
+
+### ⚙️ Continuous Integration
+
+- **bot-sync-repo-settings:** Add GitHub Pages setup to repository synchronization workflow - [c0fe1ec](https://github.com/liblaf/github-bot/commit/c0fe1ecc05da2aab27b183f320b7ec87bc5d4f94) by [@liblaf](https://github.com/liblaf)
+
+### ❤️ Contributors
+
+- [@renovate[bot]](https://github.com/apps/renovate) made their first contribution in [#28](https://github.com/liblaf/github-bot/pull/28)
+- [@liblaf](https://github.com/liblaf) made their first contribution
+
+## [0.1.2](https://github.com/liblaf/github-bot/releases/tag/v0.1.2) - 2025-11-09
 
 ### 🐛 Bug Fixes
 
-- **(deps)** update dependency @scalar/openapi-to-markdown to ^0.3.0 (#25) - [705d599](https://github.com/liblaf/github-bot/commit/705d599ae67fe20c769bf43ecbb3ecd23e63960f) by [@renovate[bot]](https://github.com/apps/renovate) in [#25](https://github.com/liblaf/github-bot/pull/25)
+- **deps:** update dependency @scalar/openapi-to-markdown to ^0.3.0 (#25) - [705d599](https://github.com/liblaf/github-bot/commit/705d599ae67fe20c769bf43ecbb3ecd23e63960f) by [@renovate[bot]](https://github.com/apps/renovate) in [#25](https://github.com/liblaf/github-bot/pull/25)
 
 ### ⚙️ Continuous Integration
 
@@ -19,15 +30,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ❤️ Contributors
 
-- [@liblaf](https://github.com/liblaf) made their first contribution
-- [@renovate[bot]](https://github.com/apps/renovate) made their first contribution in [#25](https://github.com/liblaf/github-bot/pull/25)
-- [@liblaf[bot]](https://github.com/apps/liblaf) made their first contribution in [#24](https://github.com/liblaf/github-bot/pull/24)
+- [@liblaf[bot]](https://github.com/apps/liblaf)
+- [@liblaf](https://github.com/liblaf)
+- [@renovate[bot]](https://github.com/apps/renovate)
 
 ## [0.1.1](https://github.com/liblaf/github-bot/releases/tag/v0.1.1) - 2025-11-02
 
 ### 🐛 Bug Fixes
 
-- **(labels)** Preserve existing labels during synchronization - [84cbe72](https://github.com/liblaf/github-bot/commit/84cbe72c15b6ae69d82dad7c535ca3184579dc3f) by [@liblaf](https://github.com/liblaf)
+- **labels:** Preserve existing labels during synchronization - [84cbe72](https://github.com/liblaf/github-bot/commit/84cbe72c15b6ae69d82dad7c535ca3184579dc3f) by [@liblaf](https://github.com/liblaf)
 
 ### ❤️ Contributors
 
@@ -42,49 +53,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ✨ Features
 
-- **(api)** Add global error handling for OpenAPI routes - [130ebd9](https://github.com/liblaf/github-bot/commit/130ebd9557302fcaf2c412b7ed6e606cf7895b0c) by [@liblaf](https://github.com/liblaf)
-- **(bot)** add automated repository setup and refine workflow dispatch - [3dd6607](https://github.com/liblaf/github-bot/commit/3dd6607ccc03078ef5b740f6988933f9b3c2a605) by [@liblaf](https://github.com/liblaf)
-- **(bot)** Introduce Bot app for repository management and auto-approval - [cfe4e74](https://github.com/liblaf/github-bot/commit/cfe4e74186c62c16841b57f6e5660090c99703cc) by [@liblaf](https://github.com/liblaf)
-- **(release-please)** Implement Release Please GitHub App and workflow orchestration - [2021a02](https://github.com/liblaf/github-bot/commit/2021a0277399b28b182604cb3acd259aae830f84) by [@liblaf](https://github.com/liblaf)
-- **(release-please)** integrate GitHub Check Runs for release process visibility - [84434e1](https://github.com/liblaf/github-bot/commit/84434e1b5491d2f9dd27fdaa61798e29111a53db) by [@liblaf](https://github.com/liblaf)
-- **(schedule)** introduce weekly automation schedule - [94b2690](https://github.com/liblaf/github-bot/commit/94b2690cd96e791594a5b66bdd6bc055e175b9df) by [@liblaf](https://github.com/liblaf)
-- **(schedule)** log repository name during weekly dispatch - [fb20fb9](https://github.com/liblaf/github-bot/commit/fb20fb96c5db5b3bcc56b89d162621d8a053805b) by [@liblaf](https://github.com/liblaf)
-- **(schedule)** Add 5-minute auto-approval workflow - [7861c49](https://github.com/liblaf/github-bot/commit/7861c498050ebc03e155725a53e8b17473411cf7) by [@liblaf](https://github.com/liblaf)
+- **api:** Add global error handling for OpenAPI routes - [130ebd9](https://github.com/liblaf/github-bot/commit/130ebd9557302fcaf2c412b7ed6e606cf7895b0c) by [@liblaf](https://github.com/liblaf)
+- **bot:** add automated repository setup and refine workflow dispatch - [3dd6607](https://github.com/liblaf/github-bot/commit/3dd6607ccc03078ef5b740f6988933f9b3c2a605) by [@liblaf](https://github.com/liblaf)
+- **bot:** Introduce Bot app for repository management and auto-approval - [cfe4e74](https://github.com/liblaf/github-bot/commit/cfe4e74186c62c16841b57f6e5660090c99703cc) by [@liblaf](https://github.com/liblaf)
+- **release-please:** Implement Release Please GitHub App and workflow orchestration - [2021a02](https://github.com/liblaf/github-bot/commit/2021a0277399b28b182604cb3acd259aae830f84) by [@liblaf](https://github.com/liblaf)
+- **release-please:** integrate GitHub Check Runs for release process visibility - [84434e1](https://github.com/liblaf/github-bot/commit/84434e1b5491d2f9dd27fdaa61798e29111a53db) by [@liblaf](https://github.com/liblaf)
+- **schedule:** introduce weekly automation schedule - [94b2690](https://github.com/liblaf/github-bot/commit/94b2690cd96e791594a5b66bdd6bc055e175b9df) by [@liblaf](https://github.com/liblaf)
+- **schedule:** log repository name during weekly dispatch - [fb20fb9](https://github.com/liblaf/github-bot/commit/fb20fb96c5db5b3bcc56b89d162621d8a053805b) by [@liblaf](https://github.com/liblaf)
+- **schedule:** Add 5-minute auto-approval workflow - [7861c49](https://github.com/liblaf/github-bot/commit/7861c498050ebc03e155725a53e8b17473411cf7) by [@liblaf](https://github.com/liblaf)
 - implement MegaLinter integration with GitHub check runs - [34af97b](https://github.com/liblaf/github-bot/commit/34af97b48aee09b18fb766cf12136618f7043c36) by [@liblaf](https://github.com/liblaf)
 
 ### 🐛 Bug Fixes
 
-- **(bot)** Add delay before approving pull requests - [cb651c7](https://github.com/liblaf/github-bot/commit/cb651c7f276dafb5642650e92ddc5ce18ed0fbf2) by [@liblaf](https://github.com/liblaf)
-- **(bot-copier-update)** add missing environment configuration - [4fe54df](https://github.com/liblaf/github-bot/commit/4fe54df3fb8ea347f68e7c1727b208c1ec965009) by [@liblaf](https://github.com/liblaf)
-- **(bot-release-please)** Provide GH_TOKEN for gh api calls - [8f481f8](https://github.com/liblaf/github-bot/commit/8f481f8b1638f7500eafdc2037025974eb3d5b84) by [@liblaf](https://github.com/liblaf)
-- **(ci)** Correctly update GitHub check runs in bot-release-please workflow - [0a3c46b](https://github.com/liblaf/github-bot/commit/0a3c46b7efbbfb9c94bcfb249bd15eb899ebf3c8) by [@liblaf](https://github.com/liblaf)
-- **(ci)** Ensure GH_TOKEN is available for MegaLinter environment setup - [47d627f](https://github.com/liblaf/github-bot/commit/47d627f22d1694300048b2f3f6dc35d267cc2072) by [@liblaf](https://github.com/liblaf)
-- **(ci)** Correct REPO environment variable in bot-release-please workflow - [22ccaa0](https://github.com/liblaf/github-bot/commit/22ccaa05ac930e1ea45deb6b400f980c77a05650) by [@liblaf](https://github.com/liblaf)
-- **(misc)** Correct environment variable usage for Misc GitHub App - [ad6fea5](https://github.com/liblaf/github-bot/commit/ad6fea58edd493dcaf42e8b50a5fee0c823c5050) by [@liblaf](https://github.com/liblaf)
-- **(misc)** Await repository dispatch event creation - [2fa324d](https://github.com/liblaf/github-bot/commit/2fa324d3ef9e18e9397918cf9f9dc0539ab7d51f) by [@liblaf](https://github.com/liblaf)
-- **(release-please)** Prevent workflow dispatch on non-default branches - [6094cde](https://github.com/liblaf/github-bot/commit/6094cdea19de17536247dbe3660564aed827f0df) by [@liblaf](https://github.com/liblaf)
-- **(repo-settings)** Remove explicit forking allowance - [ca409fc](https://github.com/liblaf/github-bot/commit/ca409fcd6f396f2f2a8f70e5a5e628d42738110e) by [@liblaf](https://github.com/liblaf)
-- **(routes)** add error handling middleware for OpenAPI routes - [ae817a7](https://github.com/liblaf/github-bot/commit/ae817a7e0511989836c5bbc8276214fcb0eb3ae3) by [@liblaf](https://github.com/liblaf)
+- **bot:** Add delay before approving pull requests - [cb651c7](https://github.com/liblaf/github-bot/commit/cb651c7f276dafb5642650e92ddc5ce18ed0fbf2) by [@liblaf](https://github.com/liblaf)
+- **bot-copier-update:** add missing environment configuration - [4fe54df](https://github.com/liblaf/github-bot/commit/4fe54df3fb8ea347f68e7c1727b208c1ec965009) by [@liblaf](https://github.com/liblaf)
+- **bot-release-please:** Provide GH_TOKEN for gh api calls - [8f481f8](https://github.com/liblaf/github-bot/commit/8f481f8b1638f7500eafdc2037025974eb3d5b84) by [@liblaf](https://github.com/liblaf)
+- **ci:** Correctly update GitHub check runs in bot-release-please workflow - [0a3c46b](https://github.com/liblaf/github-bot/commit/0a3c46b7efbbfb9c94bcfb249bd15eb899ebf3c8) by [@liblaf](https://github.com/liblaf)
+- **ci:** Ensure GH_TOKEN is available for MegaLinter environment setup - [47d627f](https://github.com/liblaf/github-bot/commit/47d627f22d1694300048b2f3f6dc35d267cc2072) by [@liblaf](https://github.com/liblaf)
+- **ci:** Correct REPO environment variable in bot-release-please workflow - [22ccaa0](https://github.com/liblaf/github-bot/commit/22ccaa05ac930e1ea45deb6b400f980c77a05650) by [@liblaf](https://github.com/liblaf)
+- **misc:** Correct environment variable usage for Misc GitHub App - [ad6fea5](https://github.com/liblaf/github-bot/commit/ad6fea58edd493dcaf42e8b50a5fee0c823c5050) by [@liblaf](https://github.com/liblaf)
+- **misc:** Await repository dispatch event creation - [2fa324d](https://github.com/liblaf/github-bot/commit/2fa324d3ef9e18e9397918cf9f9dc0539ab7d51f) by [@liblaf](https://github.com/liblaf)
+- **release-please:** Prevent workflow dispatch on non-default branches - [6094cde](https://github.com/liblaf/github-bot/commit/6094cdea19de17536247dbe3660564aed827f0df) by [@liblaf](https://github.com/liblaf)
+- **repo-settings:** Remove explicit forking allowance - [ca409fc](https://github.com/liblaf/github-bot/commit/ca409fcd6f396f2f2a8f70e5a5e628d42738110e) by [@liblaf](https://github.com/liblaf)
+- **routes:** add error handling middleware for OpenAPI routes - [ae817a7](https://github.com/liblaf/github-bot/commit/ae817a7e0511989836c5bbc8276214fcb0eb3ae3) by [@liblaf](https://github.com/liblaf)
 
 ### ♻ Code Refactoring
 
-- **(dispatch)** Extract dispatch Octokit creation to utility - [e96fc36](https://github.com/liblaf/github-bot/commit/e96fc36b74cd7f3d7a76947a2d95d07c6aa10377) by [@liblaf](https://github.com/liblaf)
-- **(github-bot)** Improve repository settings sync and token usage - [b019f30](https://github.com/liblaf/github-bot/commit/b019f305f011188674401438008aab1d4a22d96f) by [@liblaf](https://github.com/liblaf)
-- **(src/apps/main.ts)** disable MegaLinter and ReleasePlease integrations - [b8bd965](https://github.com/liblaf/github-bot/commit/b8bd9657f989fbb30a6048711b50024552810089) by [@liblaf](https://github.com/liblaf)
+- **dispatch:** Extract dispatch Octokit creation to utility - [e96fc36](https://github.com/liblaf/github-bot/commit/e96fc36b74cd7f3d7a76947a2d95d07c6aa10377) by [@liblaf](https://github.com/liblaf)
+- **github-bot:** Improve repository settings sync and token usage - [b019f30](https://github.com/liblaf/github-bot/commit/b019f305f011188674401438008aab1d4a22d96f) by [@liblaf](https://github.com/liblaf)
+- **src/apps/main.ts:** disable MegaLinter and ReleasePlease integrations - [b8bd965](https://github.com/liblaf/github-bot/commit/b8bd9657f989fbb30a6048711b50024552810089) by [@liblaf](https://github.com/liblaf)
 - restructure application architecture and improve GitHub integration - [10103dd](https://github.com/liblaf/github-bot/commit/10103ddb1cebd2dfb7ee7d83314f03323d489c72) by [@liblaf](https://github.com/liblaf)
 
 ### ⚙️ Continuous Integration
 
-- **(bot-copier-update)** Add checkout step for copier update - [83adf73](https://github.com/liblaf/github-bot/commit/83adf73f6960325430c5e88f65657c47e3432e5c) by [@liblaf](https://github.com/liblaf)
-- **(bot-copier-update)** add explicit copier-update dispatch type - [7418c79](https://github.com/liblaf/github-bot/commit/7418c791acf533d096c74afb4474333da402139d) by [@liblaf](https://github.com/liblaf)
-- **(bot-mega-linter)** add run-name for better workflow identification - [c40b18f](https://github.com/liblaf/github-bot/commit/c40b18fad764051e22f730bcdd6375888b53e589) by [@liblaf](https://github.com/liblaf)
-- **(bot-release-please)** Consolidate `FORCE_COLOR` and improve check run conclusion logic - [a4f64ee](https://github.com/liblaf/github-bot/commit/a4f64eee092e28b151f3a4aa0cace759ab9eb857) by [@liblaf](https://github.com/liblaf)
-- **(bot-sync-repo-settings)** add environment setup for MegaLinter and Release Please - [0eb73ec](https://github.com/liblaf/github-bot/commit/0eb73ecec20f55c5a92e70b69fdb81531b670f9e) by [@liblaf](https://github.com/liblaf)
-- **(github-workflows)** Refactor auto-approval schedules - [70bda2d](https://github.com/liblaf/github-bot/commit/70bda2da8aecd9f07ad062d6c63ac413cc40cc09) by [@liblaf](https://github.com/liblaf)
-- **(release-please)** Fix condition for changelog PR job - [ad9cdf9](https://github.com/liblaf/github-bot/commit/ad9cdf9a87f5afa1fc966e258fef0768773cc944) by [@liblaf](https://github.com/liblaf)
-- **(repo-settings)** Add workflow to synchronize repository settings - [9bd2627](https://github.com/liblaf/github-bot/commit/9bd2627449bc74910f6c854eb062b0a54cd1bf27) by [@liblaf](https://github.com/liblaf)
-- **(schedule-approve)** Generalize auto-approve workflow for bot PRs - [1f63096](https://github.com/liblaf/github-bot/commit/1f63096155d2628b34f8c677bb01c2e33d6204f8) by [@liblaf](https://github.com/liblaf)
-- **(sync-repo-settings)** configure repository settings - [541d810](https://github.com/liblaf/github-bot/commit/541d81044de9a570f5f1d513a39ee68d7707d537) by [@liblaf](https://github.com/liblaf)
+- **bot-copier-update:** Add checkout step for copier update - [83adf73](https://github.com/liblaf/github-bot/commit/83adf73f6960325430c5e88f65657c47e3432e5c) by [@liblaf](https://github.com/liblaf)
+- **bot-copier-update:** add explicit copier-update dispatch type - [7418c79](https://github.com/liblaf/github-bot/commit/7418c791acf533d096c74afb4474333da402139d) by [@liblaf](https://github.com/liblaf)
+- **bot-mega-linter:** add run-name for better workflow identification - [c40b18f](https://github.com/liblaf/github-bot/commit/c40b18fad764051e22f730bcdd6375888b53e589) by [@liblaf](https://github.com/liblaf)
+- **bot-release-please:** Consolidate `FORCE_COLOR` and improve check run conclusion logic - [a4f64ee](https://github.com/liblaf/github-bot/commit/a4f64eee092e28b151f3a4aa0cace759ab9eb857) by [@liblaf](https://github.com/liblaf)
+- **bot-sync-repo-settings:** add environment setup for MegaLinter and Release Please - [0eb73ec](https://github.com/liblaf/github-bot/commit/0eb73ecec20f55c5a92e70b69fdb81531b670f9e) by [@liblaf](https://github.com/liblaf)
+- **github-workflows:** Refactor auto-approval schedules - [70bda2d](https://github.com/liblaf/github-bot/commit/70bda2da8aecd9f07ad062d6c63ac413cc40cc09) by [@liblaf](https://github.com/liblaf)
+- **release-please:** Fix condition for changelog PR job - [ad9cdf9](https://github.com/liblaf/github-bot/commit/ad9cdf9a87f5afa1fc966e258fef0768773cc944) by [@liblaf](https://github.com/liblaf)
+- **repo-settings:** Add workflow to synchronize repository settings - [9bd2627](https://github.com/liblaf/github-bot/commit/9bd2627449bc74910f6c854eb062b0a54cd1bf27) by [@liblaf](https://github.com/liblaf)
+- **schedule-approve:** Generalize auto-approve workflow for bot PRs - [1f63096](https://github.com/liblaf/github-bot/commit/1f63096155d2628b34f8c677bb01c2e33d6204f8) by [@liblaf](https://github.com/liblaf)
+- **sync-repo-settings:** configure repository settings - [541d810](https://github.com/liblaf/github-bot/commit/541d81044de9a570f5f1d513a39ee68d7707d537) by [@liblaf](https://github.com/liblaf)
 - force color output for gh api commands - [b641533](https://github.com/liblaf/github-bot/commit/b6415338f965e9cada528f55ce40645a89df1555) by [@liblaf](https://github.com/liblaf)
 - regenerate GitHub tokens in workflows - [92275d1](https://github.com/liblaf/github-bot/commit/92275d11109b089b31b18ac7c906986baa7f2c0a) by [@liblaf](https://github.com/liblaf)
 
@@ -99,11 +110,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🐛 Bug Fixes
 
-- **(pull-request)** add concurrency configuration to prevent duplicate workflow runs - [fb747b0](https://github.com/liblaf/github-bot/commit/fb747b0830833f9353b328d16e6bc3747e929868) by [@liblaf](https://github.com/liblaf)
+- **pull-request:** add concurrency configuration to prevent duplicate workflow runs - [fb747b0](https://github.com/liblaf/github-bot/commit/fb747b0830833f9353b328d16e6bc3747e929868) by [@liblaf](https://github.com/liblaf)
 
 ### ⚙️ Continuous Integration
 
-- **(workflows)** add PyPI environment creation and update job dependencies - [8ff025c](https://github.com/liblaf/github-bot/commit/8ff025c5ea8d1c90b73fa1d59b3366dc6bb270cf) by [@liblaf](https://github.com/liblaf)
+- **workflows:** add PyPI environment creation and update job dependencies - [8ff025c](https://github.com/liblaf/github-bot/commit/8ff025c5ea8d1c90b73fa1d59b3366dc6bb270cf) by [@liblaf](https://github.com/liblaf)
 
 ### ❤️ Contributors
 
@@ -115,7 +126,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ⚙️ Continuous Integration
 
-- **(release-please)** switch to community-maintained fork - [487b761](https://github.com/liblaf/github-bot/commit/487b761ab5768f81f6dff58bc96dd054a3fedf47) by [@liblaf](https://github.com/liblaf)
+- **release-please:** switch to community-maintained fork - [487b761](https://github.com/liblaf/github-bot/commit/487b761ab5768f81f6dff58bc96dd054a3fedf47) by [@liblaf](https://github.com/liblaf)
 
 ### ❤️ Contributors
 
@@ -126,8 +137,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🐛 Bug Fixes
 
-- **(event-handling)** skip processing events from forked repositories - [52c44cd](https://github.com/liblaf/github-bot/commit/52c44cd862796cb06f54268e6f3f39dd3f8a679f) by [@liblaf](https://github.com/liblaf)
-- **(workflows)** ensure repository context for changelog generation in on-push workflow - [c3c06b0](https://github.com/liblaf/github-bot/commit/c3c06b0b63c0fea2faabddbaf22df68fc9e08a70) by [@liblaf](https://github.com/liblaf)
+- **event-handling:** skip processing events from forked repositories - [52c44cd](https://github.com/liblaf/github-bot/commit/52c44cd862796cb06f54268e6f3f39dd3f8a679f) by [@liblaf](https://github.com/liblaf)
+- **workflows:** ensure repository context for changelog generation in on-push workflow - [c3c06b0](https://github.com/liblaf/github-bot/commit/c3c06b0b63c0fea2faabddbaf22df68fc9e08a70) by [@liblaf](https://github.com/liblaf)
 
 ### ⚙️ Continuous Integration
 
@@ -143,18 +154,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🐛 Bug Fixes
 
-- **(ci)** standardize variable naming and usage - [4879736](https://github.com/liblaf/github-bot/commit/48797361e42c21a707872b5bab09be3af10ceff6) by [@liblaf](https://github.com/liblaf)
-- **(workflows)** correct repository variable references - [4f821f9](https://github.com/liblaf/github-bot/commit/4f821f9c95af6f7ceac85b3785618247606d56f6) by [@liblaf](https://github.com/liblaf)
+- **ci:** standardize variable naming and usage - [4879736](https://github.com/liblaf/github-bot/commit/48797361e42c21a707872b5bab09be3af10ceff6) by [@liblaf](https://github.com/liblaf)
+- **workflows:** correct repository variable references - [4f821f9](https://github.com/liblaf/github-bot/commit/4f821f9c95af6f7ceac85b3785618247606d56f6) by [@liblaf](https://github.com/liblaf)
 
 ### 📝 Documentation
 
-- **(workflows)** clarify cron schedule timing - [104990a](https://github.com/liblaf/github-bot/commit/104990a06220ff2915a0882d01377002253d15eb) by [@liblaf](https://github.com/liblaf)
+- **workflows:** clarify cron schedule timing - [104990a](https://github.com/liblaf/github-bot/commit/104990a06220ff2915a0882d01377002253d15eb) by [@liblaf](https://github.com/liblaf)
 
 ### ⚙️ Continuous Integration
 
-- **(repository)** add DockerHub secrets and variables - [f31b7a4](https://github.com/liblaf/github-bot/commit/f31b7a4aceaf12afed8da35e4795c3c70f08ba66) by [@liblaf](https://github.com/liblaf)
-- **(workflows)** improve repository creation workflow - [a75524e](https://github.com/liblaf/github-bot/commit/a75524ed6e0e0be5a86e11a9061c8ad9175370a4) by [@liblaf](https://github.com/liblaf)
-- **(workflows)** make owner and ref inputs optional in push workflow - [a2a057e](https://github.com/liblaf/github-bot/commit/a2a057ed9bb7facf40cbdfd322527d89d1335131) by [@liblaf](https://github.com/liblaf)
+- **repository:** add DockerHub secrets and variables - [f31b7a4](https://github.com/liblaf/github-bot/commit/f31b7a4aceaf12afed8da35e4795c3c70f08ba66) by [@liblaf](https://github.com/liblaf)
+- **workflows:** improve repository creation workflow - [a75524e](https://github.com/liblaf/github-bot/commit/a75524ed6e0e0be5a86e11a9061c8ad9175370a4) by [@liblaf](https://github.com/liblaf)
+- **workflows:** make owner and ref inputs optional in push workflow - [a2a057e](https://github.com/liblaf/github-bot/commit/a2a057ed9bb7facf40cbdfd322527d89d1335131) by [@liblaf](https://github.com/liblaf)
 - update GitHub Actions references - [14cb2f0](https://github.com/liblaf/github-bot/commit/14cb2f0953350fc9a1ac8756f633493559a5729b) by [@liblaf](https://github.com/liblaf)
 
 ### ❤️ Contributors
@@ -167,21 +178,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ✨ Features
 
-- **(webhooks)** add push event support - [ce25708](https://github.com/liblaf/github-bot/commit/ce25708a620c9caba7b3cb4c0fde470dfe8e9880) by [@liblaf](https://github.com/liblaf)
-- **(workflows)** add auto-review for Renovate PRs - [b964918](https://github.com/liblaf/github-bot/commit/b96491854f31b7e769dafe2177381a99715dabe3) by [@liblaf](https://github.com/liblaf)
+- **webhooks:** add push event support - [ce25708](https://github.com/liblaf/github-bot/commit/ce25708a620c9caba7b3cb4c0fde470dfe8e9880) by [@liblaf](https://github.com/liblaf)
+- **workflows:** add auto-review for Renovate PRs - [b964918](https://github.com/liblaf/github-bot/commit/b96491854f31b7e769dafe2177381a99715dabe3) by [@liblaf](https://github.com/liblaf)
 
 ### 🐛 Bug Fixes
 
-- **(webhooks)** truncate large PR body payloads - [612e013](https://github.com/liblaf/github-bot/commit/612e0134fd2282d2323a3d7256934b650d0c8a6b) by [@liblaf](https://github.com/liblaf)
+- **webhooks:** truncate large PR body payloads - [612e013](https://github.com/liblaf/github-bot/commit/612e0134fd2282d2323a3d7256934b650d0c8a6b) by [@liblaf](https://github.com/liblaf)
 
 ### ♻ Code Refactoring
 
-- **(workflows)** consolidate PR workflows - [b60387f](https://github.com/liblaf/github-bot/commit/b60387f3ea65949994af5da17a1d252cf9fd6f76) by [@liblaf](https://github.com/liblaf)
-- **(workflows)** standardize naming and pre job - [01ca636](https://github.com/liblaf/github-bot/commit/01ca63642f9f9285f84bc153e75ccbaf63a626af) by [@liblaf](https://github.com/liblaf)
+- **workflows:** consolidate PR workflows - [b60387f](https://github.com/liblaf/github-bot/commit/b60387f3ea65949994af5da17a1d252cf9fd6f76) by [@liblaf](https://github.com/liblaf)
+- **workflows:** standardize naming and pre job - [01ca636](https://github.com/liblaf/github-bot/commit/01ca63642f9f9285f84bc153e75ccbaf63a626af) by [@liblaf](https://github.com/liblaf)
 
 ### ⚙️ Continuous Integration
 
-- **(workflows)** add concurrency control and cleanup - [a2f0f45](https://github.com/liblaf/github-bot/commit/a2f0f4511f32810d6f49dc3f1f7921133e21b904) by [@liblaf](https://github.com/liblaf)
+- **workflows:** add concurrency control and cleanup - [a2f0f45](https://github.com/liblaf/github-bot/commit/a2f0f4511f32810d6f49dc3f1f7921133e21b904) by [@liblaf](https://github.com/liblaf)
 - add pull request workflow and improve repository workflow - [4ec26ea](https://github.com/liblaf/github-bot/commit/4ec26ea811682817ec0652828771e6ef9663d770) by [@liblaf](https://github.com/liblaf)
 - add changelog generation for PRs and releases - [3bcf0da](https://github.com/liblaf/github-bot/commit/3bcf0da9fedea794017b66bea6aef53c579fa747) by [@liblaf](https://github.com/liblaf)
 - add auto-approve workflow for release-please and renovate - [a5b2f30](https://github.com/liblaf/github-bot/commit/a5b2f3039d02290beda5c6f6c34b64a67ec1ac31) by [@liblaf](https://github.com/liblaf)
@@ -198,12 +209,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ✨ Features
 
-- **(workflows)** support workflow_dispatch and workflow_call triggers - [9390d77](https://github.com/liblaf/github-bot/commit/9390d777824baf6e9f246b42dc4fcabd8ce493f0) by [@liblaf](https://github.com/liblaf)
+- **workflows:** support workflow_dispatch and workflow_call triggers - [9390d77](https://github.com/liblaf/github-bot/commit/9390d777824baf6e9f246b42dc4fcabd8ce493f0) by [@liblaf](https://github.com/liblaf)
 - initial project setup for GitHub bot - [e8e00f0](https://github.com/liblaf/github-bot/commit/e8e00f0091ed1352db69d646137b47a8698fe378) by [@liblaf](https://github.com/liblaf)
 
 ### 🐛 Bug Fixes
 
-- **(workflow)** correct repository payload property access - [e5dba60](https://github.com/liblaf/github-bot/commit/e5dba60d3faa8f54bc8bd408b59481d7aafe5b5a) by [@liblaf](https://github.com/liblaf)
+- **workflow:** correct repository payload property access - [e5dba60](https://github.com/liblaf/github-bot/commit/e5dba60d3faa8f54bc8bd408b59481d7aafe5b5a) by [@liblaf](https://github.com/liblaf)
 
 ### 🛠 Builds
 
