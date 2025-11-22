@@ -75,7 +75,7 @@
     "@liblaf/config": "^0.1",
     "@types/node": "^24",
     "@types/service-worker-mock": "^2",
-    "bunup": "^0.15",
+    "bunup": "^0.16.0",
     "smee-client": "^5.0.0",
     "typescript": "^5",
     "wrangler": "^4"
