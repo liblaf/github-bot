@@ -33,10 +33,7 @@
     "email": "30631553+liblaf@users.noreply.github.com"
   },
   "bin": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/liblaf/github-bot.git"
-  },
+  "repository": "github:liblaf/github-bot",
   "funding": {
     "url": "https://github.com/liblaf/github-bot?sponsor=1",
     "type": "github"

@@ -23,7 +23,7 @@ jobs:
           repository: ${{ github.repository_owner }}
 
   pre-commit-ci:
-    name: Bot
+    name: pre-commit.ci
     runs-on: ubuntu-latest
     steps:
       - name: Auto Approve pre-commit-ci[bot]
