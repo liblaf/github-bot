@@ -70,7 +70,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2",
     "@liblaf/config": "^0.1",
-    "@types/node": "^24",
+    "@types/node": "^25.0.0",
     "@types/service-worker-mock": "^2",
     "bunup": "^0.16.0",
     "smee-client": "^5.0.0",
