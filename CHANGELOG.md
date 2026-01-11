@@ -7,7 +7,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Changelog](https://github.com/conventional-changelog/conventional-changelog-config-spec/blob/master/versions/2.2.0/README.md),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.4](https://github.com/liblaf/github-bot/releases/tag/v0.1.4) - 2025-12-05
+## [0.1.5](https://github.com/liblaf/github-bot/releases/tag/v0.1.5) - 2026-01-05
+
+### 🐛 Bug Fixes
+
+- **deps:** update dependency chanfana to v3 (#46) - [392835e](https://github.com/liblaf/github-bot/commit/392835edfa720afbf2abe2c8c9af02f16a193b24) by [@renovate[bot]](https://github.com/apps/renovate) in [#46](https://github.com/liblaf/github-bot/pull/46)
+
+### ❤️ Contributors
+
+- [@renovate[bot]](https://github.com/apps/renovate) made their first contribution in [#46](https://github.com/liblaf/github-bot/pull/46)
+- [@liblaf[bot]](https://github.com/apps/liblaf) made their first contribution in [#44](https://github.com/liblaf/github-bot/pull/44)
+
+## [0.1.4](https://github.com/liblaf/github-bot/releases/tag/v0.1.4) - 2025-12-07
 
 ### ⚙️ Continuous Integration
 
@@ -15,9 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ❤️ Contributors
 
-- [@liblaf](https://github.com/liblaf) made their first contribution
-- [@liblaf[bot]](https://github.com/apps/liblaf) made their first contribution in [#32](https://github.com/liblaf/github-bot/pull/32)
-- [@renovate[bot]](https://github.com/apps/renovate) made their first contribution in [#31](https://github.com/liblaf/github-bot/pull/31)
+- [@liblaf[bot]](https://github.com/apps/liblaf)
+- [@liblaf](https://github.com/liblaf)
+- [@renovate[bot]](https://github.com/apps/renovate)
 
 ## [0.1.3](https://github.com/liblaf/github-bot/releases/tag/v0.1.3) - 2025-11-16
 
