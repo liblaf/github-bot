@@ -57,8 +57,8 @@
   "dependencies": {
     "@hono/zod-openapi": "^1",
     "@octokit/webhooks": "^14",
-    "@scalar/hono-api-reference": "^0.9",
-    "@scalar/openapi-to-markdown": "^0.3.0",
+    "@scalar/hono-api-reference": "^0.10.0",
+    "@scalar/openapi-to-markdown": "^0.4.0",
     "chanfana": "^3.0.0",
     "dayjs": "^1.11.19",
     "hono": "^4",
