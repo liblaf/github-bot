@@ -7,7 +7,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Changelog](https://github.com/conventional-changelog/conventional-changelog-config-spec/blob/master/versions/2.2.0/README.md),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.5](https://github.com/liblaf/github-bot/releases/tag/v0.1.5) - 2026-01-05
+## [0.1.6](https://github.com/liblaf/github-bot/releases/tag/v0.1.6) - 2026-03-04
+
+### 🐛 Bug Fixes
+
+- **deps:** update scalar monorepo (#52) - [2a9a9a2](https://github.com/liblaf/github-bot/commit/2a9a9a286c09e53701a98028ae4d2973d87b56d8) by [@renovate[bot]](https://github.com/apps/renovate) in [#52](https://github.com/liblaf/github-bot/pull/52)
+
+### ❤️ Contributors
+
+- [@renovate[bot]](https://github.com/apps/renovate)
+- [@liblaf[bot]](https://github.com/apps/liblaf)
+
+## [0.1.5](https://github.com/liblaf/github-bot/releases/tag/v0.1.5) - 2026-01-11
 
 ### 🐛 Bug Fixes
 
@@ -15,8 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ❤️ Contributors
 
-- [@renovate[bot]](https://github.com/apps/renovate) made their first contribution in [#46](https://github.com/liblaf/github-bot/pull/46)
-- [@liblaf[bot]](https://github.com/apps/liblaf) made their first contribution in [#44](https://github.com/liblaf/github-bot/pull/44)
+- [@liblaf[bot]](https://github.com/apps/liblaf)
+- [@renovate[bot]](https://github.com/apps/renovate)
 
 ## [0.1.4](https://github.com/liblaf/github-bot/releases/tag/v0.1.4) - 2025-12-07
 
