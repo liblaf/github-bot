@@ -74,7 +74,7 @@
     "@types/service-worker-mock": "^2",
     "bunup": "^0.16.0",
     "smee-client": "^5.0.0",
-    "typescript": "^5",
+    "typescript": "^6.0.0",
     "wrangler": "^4"
   },
   "publishConfig": {
