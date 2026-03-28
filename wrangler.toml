@@ -1,6 +1,7 @@
 #:schema https://www.unpkg.com/wrangler/config-schema.json
+# ref: <https://developers.cloudflare.com/workers/wrangler/configuration/>
 
-compatibility_date = "2025-05-05"
+compatibility_date = "2026-03-27"
 compatibility_flags = ["nodejs_compat"]
 main = "./src/index.ts"
 minify = true
@@ -10,9 +11,6 @@ upload_source_maps = true
 
 [observability]
 enabled = true
-
-[placement]
-mode = "smart"
 
 [vars]
 APP_ID = "1022004"

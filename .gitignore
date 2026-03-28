@@ -3,7 +3,7 @@
 # shared
 *.log
 *.log.*
-playground/
+/playground/
 
 # Dependency directories
 node_modules/
@@ -19,9 +19,3 @@ dist/
 .env
 .wrangler/
 worker-configuration.d.ts
-
-# Dotenv
-.env*
-.flaskenv*
-!.env.project
-!.env.vault
