@@ -7,7 +7,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Changelog](https://github.com/conventional-changelog/conventional-changelog-config-spec/blob/master/versions/2.2.0/README.md),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.6](https://github.com/liblaf/github-bot/releases/tag/v0.1.6) - 2026-03-04
+## [0.1.7](https://github.com/liblaf/github-bot/releases/tag/v0.1.7) - 2026-03-28
+
+### ♻ Code Refactoring
+
+- **worker:** slim github bot to webhook relay - [c86889e](https://github.com/liblaf/github-bot/commit/c86889ef94d985533a03b96db6da34b2a6c8ace4) by [@liblaf](https://github.com/liblaf)
+
+### ⚙️ Continuous Integration
+
+- **workflows:** sync Copier environment settings - [a573381](https://github.com/liblaf/github-bot/commit/a573381f223bc67723c6244d752420f0a36e6795) by [@liblaf](https://github.com/liblaf)
+- sync additional repo settings in workflow - [7cc7300](https://github.com/liblaf/github-bot/commit/7cc7300b29e59857f0dbabb90159d32dc41b5519) by [@liblaf](https://github.com/liblaf)
+- align wrapped gh command arguments in sync workflow - [ee68fec](https://github.com/liblaf/github-bot/commit/ee68fec57def33ed6a1c4f6c745129adf077a1e1) by [@liblaf](https://github.com/liblaf)
+
+### ❤️ Contributors
+
+- [@liblaf](https://github.com/liblaf)
+- [@renovate[bot]](https://github.com/apps/renovate)
+
+## [0.1.6](https://github.com/liblaf/github-bot/releases/tag/v0.1.6) - 2026-03-08
 
 ### 🐛 Bug Fixes
 
@@ -15,8 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ❤️ Contributors
 
-- [@renovate[bot]](https://github.com/apps/renovate)
 - [@liblaf[bot]](https://github.com/apps/liblaf)
+- [@renovate[bot]](https://github.com/apps/renovate)
 
 ## [0.1.5](https://github.com/liblaf/github-bot/releases/tag/v0.1.5) - 2026-01-11
 
