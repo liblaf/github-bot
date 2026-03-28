@@ -58,9 +58,9 @@ jobs:
       - name: Set App ID
         run: >-
           gh variable set APP_ID
-            --env '${{ env.ENVIRONMENT_NAME }}'
-            --body '${{ vars.APP_ID }}'
-            --repo '${{ env.REPOSITORY }}'
+          --env '${{ env.ENVIRONMENT_NAME }}'
+          --body '${{ vars.APP_ID }}'
+          --repo '${{ env.REPOSITORY }}'
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
       - name: Set Private Key
@@ -128,9 +128,9 @@ jobs:
       - name: Set App ID
         run: >-
           gh variable set APP_ID
-            --env '${{ env.ENVIRONMENT_NAME }}'
-            --body '${{ vars.APP_ID }}'
-            --repo '${{ env.REPOSITORY }}'
+          --env '${{ env.ENVIRONMENT_NAME }}'
+          --body '${{ vars.APP_ID }}'
+          --repo '${{ env.REPOSITORY }}'
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
       - name: Set Private Key
@@ -162,9 +162,9 @@ jobs:
       - name: Set App ID
         run: >-
           gh variable set APP_ID
-            --env '${{ env.ENVIRONMENT_NAME }}'
-            --body '${{ vars.APP_ID }}'
-            --repo '${{ env.REPOSITORY }}'
+          --env '${{ env.ENVIRONMENT_NAME }}'
+          --body '${{ vars.APP_ID }}'
+          --repo '${{ env.REPOSITORY }}'
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
       - name: Set Private Key
