@@ -11,10 +11,10 @@ on:
       - sync-repo-settings
 
 env:
+  FORCE_COLOR: 1
   OWNER: ${{ github.event.client_payload.owner }}
   REPO: ${{ github.event.client_payload.repo }}
   REPOSITORY: ${{ github.event.client_payload.repository }}
-  FORCE_COLOR: 1
 
 concurrency:
   group: >-
@@ -27,11 +27,174 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set Default Workflow Permissions
-        # ref: <https://docs.github.com/en/rest/actions/permissions?apiVersion=2022-11-28#set-default-workflow-permissions-for-a-repository>
+        # ref: <https://docs.github.com/en/rest/actions/permissions?apiVersion=2026-03-10#set-default-workflow-permissions-for-a-repository>
+        # "Administration" repository permissions (write)
+        # Note: `can_approve_pull_request_reviews` grants permission to create pull requests and submit approving reviews; set to `true` to enable GitHub Actions to create pull requests.
         run: >-
           gh api '/repos/${{ env.REPOSITORY }}/actions/permissions/workflow'
           --field default_workflow_permissions='read'
           --field can_approve_pull_request_reviews=true
+          --method PUT
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+
+  env-mega-linter:
+    name: Environment > MegaLinter
+    environment:
+      name: MegaLinter
+      deployment: false
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT_NAME: MegaLinter
+    steps:
+      - name: Create Environment
+        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2026-03-10#create-or-update-an-environment>
+        # "Administration" repository permissions (write)
+        run: >-
+          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT_NAME }}'
+          --method PUT
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+      - name: Set App ID
+        run: >-
+          gh variable set APP_ID
+            --env '${{ env.ENVIRONMENT_NAME }}'
+            --body '${{ vars.APP_ID }}'
+            --repo '${{ env.REPOSITORY }}'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+      - name: Set Private Key
+        run: >-
+          gh secret set PRIVATE_KEY
+          --env '${{ env.ENVIRONMENT_NAME }}'
+          --body '${{ secrets.PRIVATE_KEY }}'
+          --repo '${{ env.REPOSITORY }}'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+
+  env-npm:
+    name: Environment > npm
+    environment:
+      name: npm
+      deployment: false
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT_NAME: npm
+    steps:
+      - name: Create Environment
+        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2026-03-10#create-or-update-an-environment>
+        # "Administration" repository permissions (write)
+        run: >-
+          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT_NAME }}'
+          --method PUT
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+
+  env-pypi:
+    name: Environment > PyPI
+    environment:
+      name: PyPI
+      deployment: false
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT_NAME: PyPI
+    steps:
+      - name: Create Environment
+        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2026-03-10#create-or-update-an-environment>
+        # "Administration" repository permissions (write)
+        run: >-
+          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT_NAME }}'
+          --method PUT
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+
+  env-release-please:
+    name: Environment > Release Please
+    environment:
+      name: Release Please
+      deployment: false
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT_NAME: Release Please
+    steps:
+      - name: Create Environment
+        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2026-03-10#create-or-update-an-environment>
+        # "Administration" repository permissions (write)
+        run: >-
+          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT_NAME }}'
+          --method PUT
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+      - name: Set App ID
+        run: >-
+          gh variable set APP_ID
+            --env '${{ env.ENVIRONMENT_NAME }}'
+            --body '${{ vars.APP_ID }}'
+            --repo '${{ env.REPOSITORY }}'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+      - name: Set Private Key
+        run: >-
+          gh secret set PRIVATE_KEY
+          --env '${{ env.ENVIRONMENT_NAME }}'
+          --body '${{ secrets.PRIVATE_KEY }}'
+          --repo '${{ env.REPOSITORY }}'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+
+  env-reviewdog:
+    name: Environment > reviewdog
+    environment:
+      name: reviewdog
+      deployment: false
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT_NAME: reviewdog
+    steps:
+      - name: Create Environment
+        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2026-03-10#create-or-update-an-environment>
+        # "Administration" repository permissions (write)
+        run: >-
+          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT_NAME }}'
+          --method PUT
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+      - name: Set App ID
+        run: >-
+          gh variable set APP_ID
+            --env '${{ env.ENVIRONMENT_NAME }}'
+            --body '${{ vars.APP_ID }}'
+            --repo '${{ env.REPOSITORY }}'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+      - name: Set Private Key
+        run: >-
+          gh secret set PRIVATE_KEY
+          --env '${{ env.ENVIRONMENT_NAME }}'
+          --body '${{ secrets.PRIVATE_KEY }}'
+          --repo '${{ env.REPOSITORY }}'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+
+  gh-pages:
+    name: GitHub Pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup GitHub Pages
+        uses: liblaf/actions/setup-pages@v1
+        with:
+          repository: ${{ env.REPOSITORY }}
+          token: ${{ secrets.GH_PAT }}
+
+  immutable-releases:
+    name: Enable immutable releases
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable immutable releases
+        # ref: <https://docs.github.com/en/rest/repos/repos?apiVersion=2026-03-10#enable-immutable-releases>
+        # "Administration" repository permissions (write)
+        run: >-
+          gh api '/repos/${{ env.REPOSITORY }}/immutable-releases'
           --method PUT
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
@@ -52,70 +215,6 @@ jobs:
           --labels 'labels.yaml'
           --allow-added-labels
           '${{ env.REPOSITORY }}'
-
-  env-mega-linter:
-    name: Environment > Mega Linter
-    environment:
-      name: MegaLinter
-    runs-on: ubuntu-latest
-    env:
-      ENVIRONMENT: MegaLinter
-    steps:
-      - name: Create Environment
-        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2022-11-28#create-or-update-an-environment>
-        run: >-
-          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT }}'
-          --method PUT
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-      - name: Set Secrets & Variables
-        run: |-
-          gh secret set PRIVATE_KEY \
-            --env '${{ env.ENVIRONMENT }}' \
-            --body '${{ secrets.PRIVATE_KEY }}' \
-            --repo '${{ env.REPOSITORY }}'
-          gh variable set APP_ID --env '${{ env.ENVIRONMENT }}' \
-            --body '${{ vars.APP_ID }}' \
-            --repo '${{ env.REPOSITORY }}'
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-
-  env-release-please:
-    name: Environment > Release Please
-    environment:
-      name: Release Please
-    runs-on: ubuntu-latest
-    env:
-      ENVIRONMENT: Release Please
-    steps:
-      - name: Create Environment
-        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2022-11-28#create-or-update-an-environment>
-        run: >-
-          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT }}'
-          --method PUT
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-      - name: Set Secrets & Variables
-        run: |-
-          gh secret set PRIVATE_KEY \
-            --env '${{ env.ENVIRONMENT }}' \
-            --body '${{ secrets.PRIVATE_KEY }}' \
-            --repo '${{ env.REPOSITORY }}'
-          gh variable set APP_ID --env '${{ env.ENVIRONMENT }}' \
-            --body '${{ vars.APP_ID }}' \
-            --repo '${{ env.REPOSITORY }}'
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-
-  gh-pages:
-    name: GitHub Pages
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup GitHub Pages
-        uses: liblaf/actions/setup-pages@v1
-        with:
-          repository: ${{ env.REPOSITORY }}
-          token: ${{ secrets.GH_PAT }}
 
   repo:
     name: Repo
