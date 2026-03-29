@@ -29,14 +29,14 @@ jobs:
     steps:
       - id: auth
         name: Auth
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
           owner: ${{ env.OWNER }}
           repositories: ${{ env.REPO }}
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           repository: ${{ env.REPOSITORY }}
           token: ${{ steps.auth.outputs.token }}
@@ -52,7 +52,7 @@ jobs:
               done
           fi
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8
         with:
           token: ${{ steps.auth.outputs.token }}
           commit-message: "chore(copier): update from template"
