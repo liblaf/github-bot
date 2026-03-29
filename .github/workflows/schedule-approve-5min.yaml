@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Auto Approve Bot
-        uses: liblaf/actions/approve@v1
+        uses: liblaf/actions/approve@bbdf0f55f18c2d3983bd26aa99b69a4fcf6a7c7b # v1
         with:
           approve-token: ${{ secrets.GH_PAT }}
           bot: true
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Auto Approve pre-commit-ci[bot]
-        uses: liblaf/actions/approve@v1
+        uses: liblaf/actions/approve@bbdf0f55f18c2d3983bd26aa99b69a4fcf6a7c7b # v1
         with:
           approve-token: ${{ secrets.GH_PAT }}
           authors: pre-commit-ci[bot]

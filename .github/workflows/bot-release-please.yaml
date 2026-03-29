@@ -28,7 +28,7 @@ jobs:
     steps:
       - id: auth
         name: Auth
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
@@ -56,14 +56,14 @@ jobs:
     steps:
       - id: auth
         name: Auth
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
           owner: ${{ env.OWNER }}
           repositories: ${{ env.REPO }}
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           repository: ${{ env.REPOSITORY }}
           ref: ${{ env.REF }}
@@ -95,21 +95,21 @@ jobs:
     steps:
       - id: auth
         name: Auth
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
           owner: ${{ env.OWNER }}
           repositories: ${{ env.REPO }}
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           repository: ${{ env.REPOSITORY }}
           ref: ${{ env.REF }}
           token: ${{ steps.auth.outputs.token }}
       - id: release-please
         name: Release Please
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4
         with:
           token: ${{ steps.auth.outputs.token }}
           config-file: ${{ needs.config.outputs.config-file }}
@@ -126,14 +126,14 @@ jobs:
     steps:
       - id: auth
         name: Auth
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
           owner: ${{ env.OWNER }}
           repositories: ${{ env.REPO }}
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           repository: ${{ env.REPOSITORY }}
           ref: ${{ fromJson(needs.release-please.outputs.pr).headBranchName }}
@@ -146,13 +146,13 @@ jobs:
           version="$(awk '{ print $NF }' <<< "$title")"
           printf 'tag=%s\n' "v$version" >> "$GITHUB_OUTPUT"
       - name: Changelog
-        uses: liblaf/actions/changelog@dist
+        uses: liblaf/actions/changelog@f6cf271d2b7400fb019d0366c1a389ab23239730 # dist
         with:
           output: CHANGELOG.md
           repository: ${{ env.REPOSITORY }}
           args: --tag '${{ steps.tag.outputs.tag }}'
       - name: Commit
-        uses: liblaf/actions/commit@dist
+        uses: liblaf/actions/commit@f6cf271d2b7400fb019d0366c1a389ab23239730 # dist
         with:
           add-options: --verbose 'CHANGELOG.md'
           message: "chore(docs): update CHANGELOG.md"
@@ -171,14 +171,14 @@ jobs:
     steps:
       - id: auth
         name: Auth
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
           owner: ${{ env.OWNER }}
           repositories: ${{ env.REPO }}
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           repository: ${{ env.REPOSITORY }}
           ref: ${{ needs.release-please.outputs.tag }}
@@ -186,7 +186,7 @@ jobs:
           fetch-depth: 0
       - id: changelog
         name: Changelog
-        uses: liblaf/actions/changelog@dist
+        uses: liblaf/actions/changelog@f6cf271d2b7400fb019d0366c1a389ab23239730 # dist
         with:
           repository: ${{ env.REPOSITORY }}
           args: --current --strip all
@@ -210,7 +210,7 @@ jobs:
     steps:
       - id: auth
         name: Auth
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
