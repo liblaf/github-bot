@@ -7,7 +7,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Changelog](https://github.com/conventional-changelog/conventional-changelog-config-spec/blob/master/versions/2.2.0/README.md),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.7](https://github.com/liblaf/github-bot/releases/tag/v0.1.7) - 2026-03-28
+## [0.1.8](https://github.com/liblaf/github-bot/releases/tag/v0.1.8) - 2026-03-30
+
+### ⚙️ Continuous Integration
+
+- update repo settings sync workflow authentication - [da9ed9c](https://github.com/liblaf/github-bot/commit/da9ed9c56f6581f3f76b1384067b23df08258133) by [@liblaf](https://github.com/liblaf)
+- add copier update dispatcher and disable immutable releases - [5c8c93c](https://github.com/liblaf/github-bot/commit/5c8c93c53237b43cdb6897efc1655131450f50a8) by [@liblaf](https://github.com/liblaf)
+
+### ❤️ Contributors
+
+- [@liblaf](https://github.com/liblaf)
+- [@renovate[bot]](https://github.com/apps/renovate)
+
+## [0.1.7](https://github.com/liblaf/github-bot/releases/tag/v0.1.7) - 2026-03-29
 
 ### ♻ Code Refactoring
 
@@ -21,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ❤️ Contributors
 
+- [@liblaf[bot]](https://github.com/apps/liblaf)
 - [@liblaf](https://github.com/liblaf)
 - [@renovate[bot]](https://github.com/apps/renovate)
 
