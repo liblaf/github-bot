@@ -252,15 +252,15 @@ jobs:
           token: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
 
   immutable-releases:
-    name: Enable Immutable Releases
+    name: Disable Immutable Releases
     runs-on: ubuntu-latest
     steps:
-      - name: Enable immutable releases
-        # ref: <https://docs.github.com/en/rest/repos/repos?apiVersion=2026-03-10#enable-immutable-releases>
+      - name: Disable immutable releases
+        # ref: <https://docs.github.com/en/rest/repos/repos?apiVersion=2026-03-10#disable-immutable-releases>
         # "Administration" repository permissions (write)
         run: >-
           gh api '/repos/${{ env.REPOSITORY }}/immutable-releases'
-          --method PUT
+          --method DELETE
         env:
           GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
 
