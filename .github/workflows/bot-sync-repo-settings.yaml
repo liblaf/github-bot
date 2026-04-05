@@ -38,208 +38,44 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
 
-  env-copier:
-    name: Environment > Copier
+  environments:
+    name: Environment > ${{ matrix.environment }}
     runs-on: ubuntu-latest
     environment:
-      name: Copier
+      name: ${{ matrix.environment }}
       deployment: false
     env:
-      ENVIRONMENT_NAME: Copier
+      GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
     steps:
       - name: Create environment
         # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2026-03-10#create-or-update-an-environment>
         # "Administration" repository permissions (write)
         run: >-
-          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT_NAME }}'
+          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ matrix.environment }}'
           --method PUT
+      - name: Set App ID & private key
+        run: |-
+          if [[ -n '${{ vars.APP_ID }}' ]]; then
+            gh variable set APP_ID \
+              --env '${{ matrix.environment }}' \
+              --body '${{ vars.APP_ID }}' \
+              --repo '${{ env.REPOSITORY }}'
+            gh secret set PRIVATE_KEY \
+              --env '${{ matrix.environment }}' \
+              --body "$PRIVATE_KEY" \
+              --repo '${{ env.REPOSITORY }}'
+          fi
         env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-      - name: Set App ID
-        run: >-
-          gh variable set APP_ID
-          --env '${{ env.ENVIRONMENT_NAME }}'
-          --body '${{ vars.APP_ID }}'
-          --repo '${{ env.REPOSITORY }}'
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-      - name: Set private key
-        run: >-
-          gh secret set PRIVATE_KEY
-          --env '${{ env.ENVIRONMENT_NAME }}'
-          --body "$PRIVATE_KEY"
-          --repo '${{ env.REPOSITORY }}'
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-
-  env-mega-linter:
-    name: Environment > MegaLinter
-    runs-on: ubuntu-latest
-    environment:
-      name: MegaLinter
-      deployment: false
-    env:
-      ENVIRONMENT_NAME: MegaLinter
-    steps:
-      - name: Create environment
-        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2026-03-10#create-or-update-an-environment>
-        # "Administration" repository permissions (write)
-        run: >-
-          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT_NAME }}'
-          --method PUT
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-      - name: Set App ID
-        run: >-
-          gh variable set APP_ID
-          --env '${{ env.ENVIRONMENT_NAME }}'
-          --body '${{ vars.APP_ID }}'
-          --repo '${{ env.REPOSITORY }}'
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-      - name: Set private key
-        run: >-
-          gh secret set PRIVATE_KEY
-          --env '${{ env.ENVIRONMENT_NAME }}'
-          --body "$PRIVATE_KEY"
-          --repo '${{ env.REPOSITORY }}'
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-
-  env-npm:
-    name: Environment > npm
-    runs-on: ubuntu-latest
-    environment:
-      name: npm
-      deployment: false
-    env:
-      ENVIRONMENT_NAME: npm
-    steps:
-      - name: Create environment
-        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2026-03-10#create-or-update-an-environment>
-        # "Administration" repository permissions (write)
-        run: >-
-          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT_NAME }}'
-          --method PUT
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-
-  env-pypi:
-    name: Environment > PyPI
-    runs-on: ubuntu-latest
-    environment:
-      name: PyPI
-      deployment: false
-    env:
-      ENVIRONMENT_NAME: PyPI
-    steps:
-      - name: Create environment
-        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2026-03-10#create-or-update-an-environment>
-        # "Administration" repository permissions (write)
-        run: >-
-          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT_NAME }}'
-          --method PUT
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-
-  env-release-please:
-    name: Environment > Release Please
-    runs-on: ubuntu-latest
-    environment:
-      name: Release Please
-      deployment: false
-    env:
-      ENVIRONMENT_NAME: Release Please
-    steps:
-      - name: Create environment
-        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2026-03-10#create-or-update-an-environment>
-        # "Administration" repository permissions (write)
-        run: >-
-          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT_NAME }}'
-          --method PUT
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-      - name: Set App ID
-        run: >-
-          gh variable set APP_ID
-          --env '${{ env.ENVIRONMENT_NAME }}'
-          --body '${{ vars.APP_ID }}'
-          --repo '${{ env.REPOSITORY }}'
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-      - name: Set private key
-        run: >-
-          gh secret set PRIVATE_KEY
-          --env '${{ env.ENVIRONMENT_NAME }}'
-          --body "$PRIVATE_KEY"
-          --repo '${{ env.REPOSITORY }}'
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-
-  env-review:
-    name: Environment > Review
-    runs-on: ubuntu-latest
-    environment:
-      name: Review
-      deployment: false
-    env:
-      ENVIRONMENT_NAME: Review
-    steps:
-      - name: Create environment
-        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2026-03-10#create-or-update-an-environment>
-        # "Administration" repository permissions (write)
-        run: >-
-          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT_NAME }}'
-          --method PUT
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-      - name: Set review token
-        run: >-
-          gh secret set REVIEW_TOKEN
-          --env '${{ env.ENVIRONMENT_NAME }}'
-          --body "$REVIEW_TOKEN"
-          --repo '${{ env.REPOSITORY }}'
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-          REVIEW_TOKEN: ${{ secrets.REVIEW_TOKEN }}
-
-  env-reviewdog:
-    name: Environment > reviewdog
-    runs-on: ubuntu-latest
-    environment:
-      name: reviewdog
-      deployment: false
-    env:
-      ENVIRONMENT_NAME: reviewdog
-    steps:
-      - name: Create environment
-        # ref: <https://docs.github.com/en/rest/deployments/environments?apiVersion=2026-03-10#create-or-update-an-environment>
-        # "Administration" repository permissions (write)
-        run: >-
-          gh api '/repos/${{ env.REPOSITORY }}/environments/${{ env.ENVIRONMENT_NAME }}'
-          --method PUT
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-      - name: Set App ID
-        run: >-
-          gh variable set APP_ID
-          --env '${{ env.ENVIRONMENT_NAME }}'
-          --body '${{ vars.APP_ID }}'
-          --repo '${{ env.REPOSITORY }}'
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-      - name: Set private key
-        run: >-
-          gh secret set PRIVATE_KEY
-          --env '${{ env.ENVIRONMENT_NAME }}'
-          --body "$PRIVATE_KEY"
-          --repo '${{ env.REPOSITORY }}'
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+    strategy:
+      matrix:
+        environment:
+          - approve
+          - copier
+          - mega-linter
+          - npm
+          - pypi
+          - release-please
 
   gh-pages:
     name: GitHub Pages
