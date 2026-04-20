@@ -61,7 +61,7 @@
     "@types/node": "25.6.0",
     "bunup": "0.16.31",
     "smee-client": "5.0.0",
-    "typescript": "6.0.2",
+    "typescript": "6.0.3",
     "wrangler": "4.83.0"
   },
   "publishConfig": {
