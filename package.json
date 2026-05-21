@@ -58,7 +58,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
     "@liblaf/config": "0.3.2",
-    "@types/node": "25.8.0",
+    "@types/node": "25.9.0",
     "bunup": "0.16.31",
     "smee-client": "5.0.0",
     "typescript": "6.0.3",
