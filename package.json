@@ -62,7 +62,7 @@
     "bunup": "0.16.31",
     "smee-client": "5.0.0",
     "typescript": "6.0.3",
-    "wrangler": "4.93.0"
+    "wrangler": "4.93.1"
   },
   "publishConfig": {
     "access": "public",
