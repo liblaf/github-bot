@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup GitHub Pages
-        uses: liblaf/actions/setup-pages@ba7e8a8be5abc0d1e1bac89ccc58f86204c06a20 # v3
+        uses: liblaf/actions/setup-pages@f53e930a3c8515151fc60ca60623e766c0c85643 # v3
         with:
           repository: ${{ env.REPOSITORY }}
           token: ${{ secrets.SYNC_REPO_SETTINGS_TOKEN }}
@@ -133,7 +133,7 @@ jobs:
     steps:
       - name: Import ruleset
         # TODO: switch to gh cli until <https://github.com/cli/cli/issues/8019> is resolved
-        uses: liblaf/actions/ruleset-import@ba7e8a8be5abc0d1e1bac89ccc58f86204c06a20 # v3
+        uses: liblaf/actions/ruleset-import@f53e930a3c8515151fc60ca60623e766c0c85643 # v3
         with:
           name: main
           source-repository: ${{ env.OWNER }}/.github
