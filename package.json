@@ -56,7 +56,7 @@
     "octokit": "^5.0.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.9",
+    "@biomejs/biome": "2.5.10",
     "@liblaf/config": "0.3.2",
     "@types/node": "26.2.0",
     "bunup": "0.16.32",
