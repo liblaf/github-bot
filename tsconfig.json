@@ -3,5 +3,5 @@
   "compilerOptions": {
     "types": ["./worker-configuration.d.ts", "node"]
   },
-  "exclude": ["bunup.config.ts", "dist/", "node_modules/"]
+  "exclude": ["**/dist/", "**/node_modules/", "bunup.config.ts"]
 }

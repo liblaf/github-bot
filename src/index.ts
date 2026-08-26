@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+
 import { createWebMiddleware } from "@octokit/webhooks";
 import type { Context as HonoContext } from "hono";
 import { Hono } from "hono";
@@ -13,11 +14,10 @@ function onRepositoryCreated(app: App): void {
   app.webhooks.on("repository.created", async ({ payload }) => {
     const { repository } = payload;
     if (repository.archived || repository.fork) return;
-    const { data: installation } =
-      await app.octokit.rest.apps.getRepoInstallation({
-        owner: repository.owner.login,
-        repo: GITHUB_REPO,
-      });
+    const { data: installation } = await app.octokit.rest.apps.getRepoInstallation({
+      owner: repository.owner.login,
+      repo: GITHUB_REPO,
+    });
     const octokit: Octokit = await app.getInstallationOctokit(installation.id);
     await octokit.rest.repos.createDispatchEvent({
       owner: repository.owner.login,

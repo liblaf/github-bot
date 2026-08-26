@@ -1,11 +1,28 @@
 {
   "name": "@liblaf/github-bot",
-  "description": "",
   "version": "0.1.7",
-  "type": "module",
+  "description": "",
+  "keywords": [],
+  "homepage": "https://github.com/liblaf/github-bot",
+  "bugs": {
+    "url": "https://github.com/liblaf/github-bot/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "liblaf",
+    "email": "30631553+liblaf@users.noreply.github.com",
+    "url": "https://github.com/liblaf"
+  },
+  "repository": "github:liblaf/github-bot",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/liblaf/github-bot?sponsor=1"
+  },
+  "bin": {},
   "files": [
     "dist"
   ],
+  "type": "module",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -17,57 +34,40 @@
     },
     "./package.json": "./package.json"
   },
-  "keywords": [],
-  "homepage": "https://github.com/liblaf/github-bot",
-  "bugs": {
-    "url": "https://github.com/liblaf/github-bot/issues"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "liblaf",
-    "url": "https://github.com/liblaf",
-    "email": "30631553+liblaf@users.noreply.github.com"
-  },
-  "bin": {},
-  "repository": "github:liblaf/github-bot",
-  "funding": {
-    "url": "https://github.com/liblaf/github-bot?sponsor=1",
-    "type": "github"
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "build": "bunup",
-    "dev-proxy": "smee --port 8787 --path '/api/github/webhooks'",
     "dev": "wrangler dev --port 8787",
-    "format:fix": "biome format --write",
-    "format": "biome format",
+    "dev-proxy": "smee --port 8787 --path '/api/github/webhooks'",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
     "generate-types": "wrangler types --env-file '.dev.vars.example' --env-interface 'CloudflareBindings'",
-    "lint:fix": "biome check --write",
-    "lint": "biome check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "prepack": "bun run build",
     "prepare": "bun run generate-types",
-    "test:coverage": "bun test --coverage",
-    "test:watch": "bun test --watch",
-    "test": "bun test",
-    "tsc": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "update": "bun update --latest && bun install"
   },
   "dependencies": {
     "@octokit/webhooks": "^14.2.0",
-    "hono": "^4.12.9",
+    "hono": "^4.13.5",
     "octokit": "^5.0.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.10",
     "@liblaf/config": "0.3.2",
-    "@types/node": "26.2.0",
+    "@types/node": "26.3.0",
     "bunup": "0.16.32",
+    "oxfmt": "^0.65.0",
+    "oxlint": "^1.80.0",
+    "oxlint-tsgolint": "^7.0.2001",
     "smee-client": "5.0.0",
     "typescript": "7.0.2",
-    "wrangler": "4.125.0"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/",
-    "provenance": true
+    "wrangler": "4.126.0"
   },
   "readme": "./README.md"
 }
