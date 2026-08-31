@@ -67,7 +67,7 @@
     "oxlint-tsgolint": "7.0.2001",
     "smee-client": "5.0.0",
     "typescript": "7.0.2",
-    "wrangler": "4.127.0"
+    "wrangler": "4.127.1"
   },
   "readme": "./README.md"
 }
