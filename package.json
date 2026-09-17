@@ -62,7 +62,7 @@
     "@liblaf/config": "0.3.2",
     "@types/node": "26.5.1",
     "bunup": "0.16.32",
-    "oxfmt": "0.67.0",
+    "oxfmt": "0.68.0",
     "oxlint": "1.82.0",
     "oxlint-tsgolint": "7.0.2001",
     "smee-client": "5.0.0",
