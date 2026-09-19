@@ -7,6 +7,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Changelog](https://github.com/conventional-changelog/conventional-changelog-config-spec/blob/master/versions/2.2.0/README.md),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.1.9](https://github.com/liblaf/github-bot/releases/tag/v0.1.9) - 2026-09-19
+
+### ⚙️ Continuous Integrations
+
+- **(deps)** update liblaf/actions digest to 3760e21 (#212) - [917d4a3](https://github.com/liblaf/github-bot/commit/917d4a3bcf39bdc3586e70ddf8946cef4efe8678) by [@renovate[bot]](https://github.com/apps/renovate)
+
+### ❤️ Contributors
+
+- [@renovate[bot]](https://github.com/apps/renovate)
+
 ## [v0.1.8](https://github.com/liblaf/github-bot/releases/tag/v0.1.8) - 2026-09-13
 
 ### ⚙️ Continuous Integrations
@@ -39,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ❤️ Contributors
 
+- [@liblaf-release-please[bot]](https://github.com/apps/liblaf-release-please) made their first contribution in [#65](https://github.com/liblaf/github-bot/pull/65)
 - [@renovate[bot]](https://github.com/apps/renovate)
 - [@liblaf-copier[bot]](https://github.com/apps/liblaf-copier) made their first contribution in [#201](https://github.com/liblaf/github-bot/pull/201)
 - [@liblaf](https://github.com/liblaf)
